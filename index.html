@@ -1,747 +1,413 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0c0f0d" />
-  <meta name="color-scheme" content="dark" />
-  <meta name="description" content="Website resmi kelas XI AL GHOZALI - ruang cerita, kenangan, jadwal, dan kebersamaan." />
-  <title>XI AL GHOZALI</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <style>
-    :root{
-      --bg:#0c0f0d;--bg2:#111511;--card:#151a16;--card2:#1b211c;
-      --line:rgba(185,204,124,.14);--line2:rgba(255,255,255,.07);
-      --ink:#e8ece0;--muted:#939d8a;
-      --army:#5d6e2e;--army2:#7a8c3c;--lime:#b9cc7c;--lime2:#d4e3a2;
-      --grad:linear-gradient(135deg,#7a8c3c,#44502a);
-      --radius:22px;--ff:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;
-      --ease:cubic-bezier(.22,1,.36,1);
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth;scroll-padding-top:90px;-webkit-text-size-adjust:100%}
-    body{background:var(--bg);color:var(--ink);font-family:var(--ff);line-height:1.65;overflow-x:hidden}
-    body.lock{overflow:hidden}
-    a{color:inherit;text-decoration:none}img{display:block;max-width:100%}button{font-family:inherit}
-    ::selection{background:var(--army2);color:#fff}
-    ::-webkit-scrollbar{width:9px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#2c352a;border-radius:9px}
-    .container{width:min(1180px,calc(100% - 40px));margin:auto}
-    .mono{font-family:var(--mono)}
-
-    /* ---------- Background ---------- */
-    .bg-grid{position:fixed;inset:0;z-index:-2;pointer-events:none;
-      background-image:linear-gradient(var(--line2) 1px,transparent 1px),linear-gradient(90deg,var(--line2) 1px,transparent 1px);
-      background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at 50% 20%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at 50% 20%,#000 20%,transparent 75%);opacity:.55}
-    .blob{position:fixed;z-index:-1;border-radius:50%;filter:blur(90px);pointer-events:none;opacity:.35;animation:float 18s ease-in-out infinite}
-    .blob.b1{width:420px;height:420px;background:#4a5a26;top:-120px;right:-120px}
-    .blob.b2{width:360px;height:360px;background:#2f3a2c;bottom:-100px;left:-120px;animation-delay:-8s}
-    @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,50px)}}
-    .glow{position:fixed;left:0;top:0;width:420px;height:420px;margin:-210px 0 0 -210px;z-index:-1;pointer-events:none;
-      background:radial-gradient(circle,rgba(185,204,124,.10),transparent 65%);transition:opacity .3s;opacity:0}
-    .progress{position:fixed;left:0;top:0;height:3px;width:0;z-index:120;background:linear-gradient(90deg,var(--army2),var(--lime2))}
-
-    /* ---------- Loader ---------- */
-    #loader{position:fixed;inset:0;z-index:999;display:grid;place-items:center;color:var(--ink)}
-    .ld-panel{position:absolute;left:0;right:0;height:50.3%;background:#0a0d0b;transition:transform 1.05s cubic-bezier(.77,0,.18,1);
-      background-image:linear-gradient(rgba(185,204,124,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(185,204,124,.05) 1px,transparent 1px);background-size:48px 48px}
-    .ld-panel.t{top:0}.ld-panel.b{bottom:0}
-    #loader.done .ld-panel.t{transform:translateY(-101%)}#loader.done .ld-panel.b{transform:translateY(101%)}
-    .ld-center{position:relative;z-index:2;width:min(92vw,900px);padding:44px 12px;text-align:center;transition:opacity .45s,transform .7s var(--ease)}
-    #loader.done .ld-center{opacity:0;transform:scale(1.07)}
-    .ld-center i.c{position:absolute;width:26px;height:26px;border:2px solid var(--army2);opacity:.9}
-    .ld-center i.c1{top:0;left:0;border-right:0;border-bottom:0}.ld-center i.c2{top:0;right:0;border-left:0;border-bottom:0}
-    .ld-center i.c3{bottom:0;left:0;border-right:0;border-top:0}.ld-center i.c4{bottom:0;right:0;border-left:0;border-top:0}
-    .ld-radar{width:74px;height:74px;margin:0 auto 22px;position:relative}
-    .ld-radar svg{width:100%;height:100%}
-    .ld-radar .sweep{transform-origin:50% 50%;animation:spin 1.8s linear infinite}
-    .ld-radar .dash{transform-origin:50% 50%;animation:spin 6s linear infinite reverse}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .ld-tag{font:500 .72rem var(--mono);letter-spacing:.3em;color:var(--lime);margin-bottom:16px;text-transform:uppercase}
-    .ld-title{position:relative;display:inline-block;font:700 clamp(2rem,9.2vw,6.2rem)/1 var(--ff);letter-spacing:-.03em;white-space:nowrap;
-      animation:ldIn 1s var(--ease) both}
-    @keyframes ldIn{from{opacity:0;transform:translateY(24px);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
-    .ld-ghost{display:block;color:transparent;-webkit-text-stroke:1px rgba(185,204,124,.38)}
-    .ld-fill{position:absolute;inset:0;display:block;white-space:nowrap;clip-path:inset(0 calc(100% - var(--p,0%)) 0 0);
-      background:linear-gradient(90deg,#7a8c3c,#d4e3a2);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
-    .ld-scan{position:absolute;top:-8%;bottom:-8%;left:var(--p,0%);width:2px;background:var(--lime2);box-shadow:0 0 18px 3px rgba(212,227,162,.55);border-radius:2px}
-    .ld-meta{display:flex;justify-content:space-between;align-items:center;margin:26px auto 10px;max-width:560px;font:500 .74rem var(--mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
-    .ld-meta b{color:var(--lime2);font-weight:600}
-    .ld-bar{max-width:560px;height:3px;margin:0 auto;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
-    .ld-bar span{display:block;height:100%;width:var(--p,0%);background:linear-gradient(90deg,var(--army2),var(--lime2));box-shadow:0 0 14px rgba(185,204,124,.6)}
-
-    /* ---------- Reveal ---------- */
-    .rv{opacity:0;transform:translateY(30px);filter:blur(6px);transition:opacity .8s var(--ease),transform .8s var(--ease),filter .8s var(--ease);transition-delay:var(--d,0s)}
-    .rv.in{opacity:1;transform:none;filter:none}
-
-    /* ---------- Nav ---------- */
-    .nav{position:fixed;top:14px;left:0;right:0;margin:0 auto;z-index:100;width:min(1120px,calc(100% - 24px));
-      display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px 12px 9px 16px;border-radius:999px;
-      background:rgba(18,22,19,.72);border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:.3s}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
-    .lg-mark{width:34px;height:34px;border-radius:11px;background:var(--grad);display:grid;place-items:center;font:700 .8rem var(--mono);color:#f3f7e6;box-shadow:0 6px 18px rgba(93,110,46,.45)}
-    .links{display:flex;align-items:center;gap:4px}
-    .links a{position:relative;padding:8px 14px;border-radius:999px;font:500 .82rem var(--ff);color:var(--muted);transition:.25s}
-    .links a:hover{color:var(--ink)}
-    .links a.active{color:#10150d;background:var(--lime)}
-    .burger{display:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);cursor:pointer;position:relative}
-    .burger span{position:absolute;left:12px;right:12px;height:2px;background:var(--lime);border-radius:2px;transition:.3s}
-    .burger span:first-child{top:16px}.burger span:last-child{top:24px}
-    .burger.open span:first-child{top:20px;transform:rotate(45deg)}.burger.open span:last-child{top:20px;transform:rotate(-45deg)}
-
-    /* ---------- Section commons ---------- */
-    .section{padding:104px 0 40px;position:relative}
-    .sec-head{max-width:700px;margin:0 0 44px}
-    .eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 .74rem var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--lime)}
-    .eyebrow:before{content:"";width:28px;height:1px;background:var(--lime)}
-    .sec-head h2{font:700 clamp(2rem,5vw,3.3rem)/1.08 var(--ff);letter-spacing:-.035em;margin:12px 0}
-    .sec-head h2 em{font-style:normal;color:transparent;background:linear-gradient(90deg,var(--army2),var(--lime2));-webkit-background-clip:text;background-clip:text}
-    .sec-head p{color:var(--muted);max-width:560px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012));border:1px solid var(--line);border-radius:var(--radius);position:relative;overflow:hidden;transition:transform .45s var(--ease),border-color .3s,box-shadow .4s}
-    .spot:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
-      background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(185,204,124,.13),transparent 70%)}
-    .spot:hover:before{opacity:1}
-    .card:hover{border-color:rgba(185,204,124,.38);box-shadow:0 22px 50px rgba(0,0,0,.4)}
-    .btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:14px 24px;font:600 .9rem var(--ff);cursor:pointer;transition:.3s var(--ease)}
-    .btn-primary{background:var(--lime);color:#11160c;box-shadow:0 12px 30px rgba(122,140,60,.35)}
-    .btn-primary:hover{transform:translateY(-3px);background:var(--lime2)}
-    .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-    .btn-ghost:hover{border-color:var(--lime);color:var(--lime2);transform:translateY(-3px)}
-    .btn i{transition:transform .3s}.btn:hover i.fa-arrow-right{transform:translateX(4px)}
-
-    /* ---------- Hero ---------- */
-    .hero{min-height:100svh;padding:130px 0 40px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
-    #fx{position:absolute;inset:0;width:100%;height:100%;z-index:-1;opacity:.75}
-    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
-    .pill{display:inline-flex;align-items:center;gap:10px;padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(185,204,124,.06);font:500 .72rem var(--mono);letter-spacing:.14em;color:var(--lime);text-transform:uppercase}
-    .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--lime2);box-shadow:0 0 0 0 rgba(212,227,162,.7);animation:pulse 2s infinite}
-    @keyframes pulse{70%{box-shadow:0 0 0 9px rgba(212,227,162,0)}100%{box-shadow:0 0 0 0 rgba(212,227,162,0)}}
-    .hero h1{font:700 clamp(2.9rem,7.4vw,6rem)/.98 var(--ff);letter-spacing:-.05em;margin:22px 0 20px}
-    .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
-    .hero h1 .ln span{display:block;transform:translateY(110%);transition:transform 1s var(--ease);transition-delay:var(--d,0s)}
-    .hero h1.in .ln span{transform:none}
-    .hero h1 .acc{color:transparent;-webkit-text-stroke:1.5px var(--lime);}
-    .hero h1 .acc2{background:linear-gradient(90deg,var(--army2),var(--lime2));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .typed{font:500 1rem var(--mono);color:var(--muted);min-height:1.7em}
-    .typed b{color:var(--lime2);font-weight:500}.typed .cur{display:inline-block;width:8px;height:1.05em;background:var(--lime);vertical-align:-3px;margin-left:3px;animation:blink 1s steps(2) infinite}
-    @keyframes blink{50%{opacity:0}}
-    .hero-copy{max-width:540px;color:var(--muted);margin:14px 0 28px}
-    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:38px;max-width:520px}
-    .stat{padding:16px 18px;border-radius:18px}
-    .stat strong{display:block;font:700 2rem/1.1 var(--ff);color:var(--lime2);letter-spacing:-.03em}
-    .stat span{font:500 .68rem var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
-    .frame-wrap{perspective:1000px}
-    .frame{position:relative;padding:14px;border-radius:30px;background:linear-gradient(145deg,#1c231d,#121612);border:1px solid var(--line);box-shadow:0 40px 90px rgba(0,0,0,.55);transition:transform .25s ease-out;transform-style:preserve-3d}
-    .frame img{width:100%;aspect-ratio:4/4.4;object-fit:cover;border-radius:20px;background:var(--card2)}
-    .frame:before,.frame:after{content:"";position:absolute;width:34px;height:34px;border:2px solid var(--lime);z-index:2;opacity:.8}
-    .frame:before{top:-8px;left:-8px;border-right:0;border-bottom:0;border-top-left-radius:12px}
-    .frame:after{bottom:-8px;right:-8px;border-left:0;border-top:0;border-bottom-right-radius:12px}
-    .note{position:absolute;left:-18px;bottom:34px;padding:13px 17px;border-radius:16px;background:rgba(21,26,22,.92);border:1px solid var(--line);backdrop-filter:blur(10px);box-shadow:0 18px 40px rgba(0,0,0,.5);transform:translateZ(50px);animation:bob 5s ease-in-out infinite}
-    .note b{display:block;font-size:.86rem}.note small{font:500 .66rem var(--mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
-    .chip-float{position:absolute;right:-12px;top:36px;padding:10px 14px;border-radius:14px;background:var(--lime);color:#10150d;font:600 .72rem var(--mono);letter-spacing:.08em;box-shadow:0 14px 30px rgba(122,140,60,.4);animation:bob 6s ease-in-out infinite reverse;transform:translateZ(60px)}
-    @keyframes bob{50%{transform:translateY(-10px) translateZ(50px)}}
-    .marquee{margin-top:60px;border-block:1px solid var(--line);overflow:hidden;padding:14px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
-    .marquee-track{display:flex;gap:44px;width:max-content;animation:marq 32s linear infinite;font:500 .78rem var(--mono);letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
-    .marquee-track span{display:flex;align-items:center;gap:44px;white-space:nowrap}.marquee-track span:after{content:"✦";color:var(--army2)}
-    @keyframes marq{to{transform:translateX(-50%)}}
-
-    /* ---------- Profil ---------- */
-    .profile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-    .profile-card{display:flex;align-items:center;gap:20px;padding:20px}
-    .profile-card img{width:112px;height:132px;object-fit:cover;border-radius:16px;background:var(--card2);flex:none}
-    .role{font:600 .68rem var(--mono);letter-spacing:.14em;color:var(--lime);text-transform:uppercase}
-    .profile-card h3{font:700 1.3rem/1.25 var(--ff);margin:6px 0 2px;letter-spacing:-.02em}.profile-card p{color:var(--muted);font-size:.86rem}
-    .subhead{display:flex;align-items:center;gap:14px;margin:46px 0 18px;font:700 1.35rem var(--ff);letter-spacing:-.02em}
-    .subhead:after{content:"";flex:1;height:1px;background:var(--line)}
-    .officers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .officer{padding:18px;text-align:center}
-    .officer .av{margin:0 auto 12px}
-    .officer h4{font-size:.98rem}.officer p{font:600 .66rem var(--mono);letter-spacing:.1em;color:var(--lime);text-transform:uppercase;margin-top:3px}
-
-    /* avatar */
-    .av{width:96px;height:96px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,var(--army2),var(--lime2),#2c352a,var(--army2));position:relative;transition:.5s}
-    .av img,.av .ini{width:100%;height:100%;border-radius:50%;object-fit:cover;background:var(--card2);border:3px solid var(--card)}
-    .av .ini{display:grid;place-items:center;font:700 1.5rem var(--ff);color:var(--lime2);background:linear-gradient(135deg,#242c22,#171c18)}
-    .card:hover .av{transform:rotate(8deg) scale(1.05)}
-
-    /* ---------- Struktur & Anggota ---------- */
-    .org{padding:30px 22px;border-radius:28px;background:linear-gradient(180deg,#141914,#0f130f);border:1px solid var(--line);margin-bottom:30px}
-    .org-title{text-align:center;margin-bottom:22px}.org-title h3{font:700 1.5rem var(--ff);letter-spacing:-.02em;margin-top:6px}
-    .tree{display:flex;flex-direction:column;align-items:center}
-    .node{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px 22px;text-align:center;min-width:180px;position:relative}
-    .node small{display:block;font:600 .62rem var(--mono);letter-spacing:.16em;color:var(--lime);text-transform:uppercase}.node strong{font-size:.95rem}
-    .tline{width:1px;height:24px;background:linear-gradient(var(--army2),transparent 0,var(--army2))}
-    .trow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;width:100%;position:relative;padding-top:2px}
-    .trow .node{flex:1;min-width:140px;max-width:220px}
-    .tools{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px}
-    .search{position:relative;flex:1;min-width:240px;max-width:420px}
-    .search i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted)}
-    .search input{width:100%;padding:13px 16px 13px 44px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 .9rem var(--ff);outline:0;transition:.25s}
-    .search input:focus{border-color:var(--lime);box-shadow:0 0 0 4px rgba(185,204,124,.12)}
-    .count{font:500 .76rem var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}.count b{color:var(--lime2)}
-    .member-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .member{padding:24px 16px 20px;text-align:center;display:flex;flex-direction:column;align-items:center}
-    .member .av{margin-bottom:14px}
-    .member h4{font:600 1rem/1.3 var(--ff)}
-    .member .mrole{font:600 .64rem var(--mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:4px 0 14px}
-    .member .mrole.key{color:var(--lime)}
-    .ig{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(185,204,124,.05);font:500 .76rem var(--mono);color:var(--lime2);transition:.3s;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .ig:hover{background:var(--lime);color:#10150d;border-color:var(--lime)}
-    .ig.off{color:var(--muted);opacity:.55;pointer-events:none}
-    .empty{display:none;text-align:center;padding:40px;color:var(--muted);font:500 .9rem var(--mono)}
-
-    /* ---------- Prestasi ---------- */
-    .ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .ach{padding:24px}
-    .ach .thumb{margin:-24px -24px 20px;height:170px;overflow:hidden;cursor:zoom-in;position:relative}
-    .ach .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}.ach:hover .thumb img{transform:scale(1.07)}
-    .ach .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-    .ico{width:48px;height:48px;border-radius:15px;background:rgba(185,204,124,.1);border:1px solid var(--line);color:var(--lime2);display:grid;place-items:center;font-size:1.15rem}
-    .year{font:600 .7rem var(--mono);letter-spacing:.14em;color:var(--muted);padding:5px 10px;border:1px solid var(--line);border-radius:999px}
-    .ach h3{font:700 1.2rem/1.3 var(--ff);letter-spacing:-.02em;margin-bottom:6px}.ach p{color:var(--muted);font-size:.9rem}
-
-    /* ---------- Galeri ---------- */
-    .masonry{columns:4 220px;column-gap:14px}
-    .shot{break-inside:avoid;margin-bottom:14px;border-radius:18px;overflow:hidden;position:relative;cursor:zoom-in;border:1px solid var(--line);background:var(--card)}
-    .shot img{width:100%;display:block;transition:transform .7s var(--ease),filter .5s;filter:saturate(.9)}
-    .shot:hover img{transform:scale(1.07);filter:saturate(1.1)}
-    .shot .cap{position:absolute;inset:auto 0 0 0;padding:44px 14px 13px;background:linear-gradient(transparent,rgba(8,11,8,.92));font:600 .82rem var(--ff);transform:translateY(100%);transition:transform .45s var(--ease)}
-    .shot:hover .cap,.shot:focus-visible .cap{transform:none}
-    .shot .zoom{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(12,15,13,.7);backdrop-filter:blur(6px);display:grid;place-items:center;color:var(--lime2);font-size:.8rem;opacity:0;transform:scale(.7);transition:.35s}
-    .shot:hover .zoom{opacity:1;transform:none}
-    .more{text-align:center;margin-top:26px}
-
-    /* ---------- Catatan ---------- */
-    .quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .quote{padding:28px}.quote i{color:var(--army2);font-size:1.5rem}
-    .quote p{font:500 1.15rem/1.55 var(--ff);margin:14px 0;letter-spacing:-.01em}.quote small{font:500 .72rem var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
-
-    /* ---------- Tabel ---------- */
-    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);-webkit-overflow-scrolling:touch}
-    table{width:100%;border-collapse:collapse;min-width:760px}
-    th,td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line2);font-size:.88rem}
-    th{font:600 .7rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--lime);background:#10150f;white-space:nowrap}
-    tr:last-child td{border-bottom:0}
-    td:first-child{font-weight:700;white-space:nowrap;position:sticky;left:0;background:var(--card);z-index:1}
-    th:first-child{position:sticky;left:0;z-index:2}
-    tbody tr{transition:background .25s}tbody tr:hover td{background:#1a211b}
-    tr.today td{background:rgba(185,204,124,.08)!important}
-    .today-tag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--lime);color:#10150d;font:700 .58rem var(--mono);letter-spacing:.1em;vertical-align:2px}
-    .act{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;background:rgba(185,204,124,.12);border:1px solid var(--line);color:var(--lime2);font-weight:600;font-size:.8rem}
-    .dim{color:var(--muted)}
-    .tnote{font:500 .74rem var(--mono);color:var(--muted);margin:12px 4px 0}
-
-    /* ---------- Agenda ---------- */
-    .agenda-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    .agenda{display:flex;gap:18px;align-items:flex-start;padding:22px}
-    .a-ico{width:54px;height:54px;border-radius:16px;flex:none;background:var(--grad);display:grid;place-items:center;font-size:1.2rem;color:#f2f7e3;box-shadow:0 10px 24px rgba(68,80,42,.5)}
-    .a-tag{font:600 .66rem var(--mono);letter-spacing:.16em;color:var(--lime);text-transform:uppercase}
-    .agenda h4{font:700 1.1rem/1.3 var(--ff);margin:4px 0 4px;letter-spacing:-.02em}.agenda p{color:var(--muted);font-size:.88rem}
-
-    /* ---------- Closing & Footer ---------- */
-    .closing{margin-top:110px;text-align:center;padding:76px 22px;border-radius:32px;position:relative;overflow:hidden;background:linear-gradient(160deg,#171e17,#0e120e);border:1px solid var(--line)}
-    .closing:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:rgba(93,110,46,.35);filter:blur(60px);top:-260px;left:calc(50% - 210px)}
-    .closing h2{position:relative;font:700 clamp(2rem,5vw,3.6rem)/1.05 var(--ff);letter-spacing:-.04em;margin:14px 0}
-    .closing p{position:relative;color:var(--muted);max-width:560px;margin:0 auto 26px}
-    .socials{position:relative;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}
-    .socials a{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--lime2);transition:.3s var(--ease);background:rgba(255,255,255,.02)}
-    .socials a:hover{background:var(--lime);color:#10150d;transform:translateY(-4px)}
-    .footer{padding:40px 0 44px;color:var(--muted);font:500 .74rem var(--mono);letter-spacing:.06em}
-    .footer-inner{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
-    .footer b{color:var(--lime2)}
-    .backtop{position:fixed;right:18px;bottom:18px;z-index:90;width:48px;height:48px;border:1px solid var(--line);border-radius:50%;background:rgba(21,26,22,.9);color:var(--lime2);cursor:pointer;backdrop-filter:blur(10px);opacity:0;transform:translateY(20px);pointer-events:none;transition:.35s var(--ease)}
-    .backtop.show{opacity:1;transform:none;pointer-events:auto}.backtop:hover{background:var(--lime);color:#10150d}
-
-    /* ---------- Lightbox ---------- */
-    .lb{position:fixed;inset:0;z-index:300;background:rgba(6,8,6,.94);backdrop-filter:blur(8px);display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s}
-    .lb.open{opacity:1;pointer-events:auto}
-    .lb figure{max-width:min(960px,100%);text-align:center;transform:scale(.94);transition:transform .45s var(--ease)}.lb.open figure{transform:none}
-    .lb img{max-width:100%;max-height:76vh;border-radius:14px;margin:auto;box-shadow:0 30px 80px rgba(0,0,0,.6);transition:opacity .25s}
-    .lb figcaption{margin-top:14px;font-weight:600}.lb figcaption small{display:block;font:500 .72rem var(--mono);letter-spacing:.14em;color:var(--muted);margin-top:4px}
-    .lb button{position:absolute;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:rgba(21,26,22,.9);color:var(--ink);font-size:1rem;cursor:pointer;transition:.25s}
-    .lb button:hover{background:var(--lime);color:#10150d}
-    .lb .x{top:16px;right:16px}.lb .pv{left:16px;top:50%}.lb .nx{right:16px;top:50%}
-
-    /* ---------- Responsive ---------- */
-    @media(max-width:1000px){
-      .nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(18,22,19,.95)}
-      .links{position:fixed;inset:0;flex-direction:column;justify-content:center;gap:8px;background:rgba(10,13,10,.97);opacity:0;pointer-events:none;transition:opacity .35s;z-index:-1}
-      .links.open{opacity:1;pointer-events:auto}
-      .links a{font-size:1.5rem;padding:12px 26px;color:var(--ink)}
-      .burger{display:block;z-index:2}
-      .hero-grid{grid-template-columns:1fr;gap:40px}.frame-wrap{max-width:460px;margin:0 auto;width:100%}
-      .member-grid{grid-template-columns:repeat(3,1fr)}.officers{grid-template-columns:repeat(2,1fr)}.ach-grid{grid-template-columns:repeat(2,1fr)}
-    }
-    @media(max-width:680px){
-      .container{width:calc(100% - 28px)}.section{padding:84px 0 30px}
-      .profile-grid,.quote-grid,.agenda-grid{grid-template-columns:1fr}.ach-grid{grid-template-columns:1fr}
-      .member-grid{grid-template-columns:repeat(2,1fr);gap:10px}.member{padding:20px 10px 16px}.av{width:84px;height:84px}
-      .stats{gap:8px}.stat{padding:12px}.stat strong{font-size:1.5rem}
-      .note{left:8px}.chip-float{right:6px}
-      .profile-card img{width:92px;height:112px}
-      .lb .pv,.lb .nx{top:auto;bottom:22px}
-      .tools{flex-direction:column;align-items:stretch}.search{max-width:none}
-      .masonry{columns:2 140px;column-gap:10px}.shot{margin-bottom:10px;border-radius:14px}
-      .shot .cap{transform:none;font-size:.7rem;padding:30px 10px 9px}.shot .zoom{display:none}
-    }
-    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none;filter:none}.hero h1 .ln span{transform:none}}
-  </style>
-  <noscript><style>#loader{display:none}.rv{opacity:1;transform:none;filter:none}.hero h1 .ln span{transform:none}body{overflow:auto}</style></noscript>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1511" id="tc">
+<title>XI AL GHOZALI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>try{var r=document.documentElement,t=localStorage.getItem('theme'),p=localStorage.getItem('pal');if(t)r.dataset.theme=t;if(p)r.dataset.p=p}catch(e){}</script>
+<style>
+:root{--a1:#17a34a;--a2:#d9f7c8;--a3:#075e54;--hf:'Sora',system-ui,sans-serif;--bf:'Manrope',system-ui,sans-serif;--e:cubic-bezier(.22,1,.36,1);
+--bg:color-mix(in srgb,var(--a2) 38%,#fff);--bg2:color-mix(in srgb,var(--a2) 75%,#fff);--ink:#14211a;--mut:#4d5c54;--card:rgba(255,255,255,.8);--line:color-mix(in srgb,var(--a3) 18%,transparent);--acc:var(--a3);--sh:0 20px 50px color-mix(in srgb,var(--a3) 20%,transparent);--gl:rgba(255,255,255,.45);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-p="ice"]{--a1:#2b94de;--a2:#d6f0ff;--a3:#0b4f86}
+:root[data-p="pink"]{--a1:#e0558f;--a2:#ffe1ee;--a3:#9c2a62}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:color-mix(in srgb,var(--a3) 26%,#070b0a);--bg2:color-mix(in srgb,var(--a3) 40%,#070b0a);--ink:#eef6f1;--mut:#9fb0a7;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.14);--acc:var(--a2);--sh:0 24px 60px rgba(0,0,0,.5);--gl:rgba(255,255,255,.14)}}
+:root[data-theme="dark"]{--bg:color-mix(in srgb,var(--a3) 26%,#070b0a);--bg2:color-mix(in srgb,var(--a3) 40%,#070b0a);--ink:#eef6f1;--mut:#9fb0a7;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.14);--acc:var(--a2);--sh:0 24px 60px rgba(0,0,0,.5);--gl:rgba(255,255,255,.14)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:96px;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:400 1rem/1.65 var(--bf);overflow-x:hidden;transition:background-color .5s,color .5s}
+body.lock{overflow:hidden}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0}img,video{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.wrap{width:min(1180px,calc(100% - 36px));margin:auto}
+h1,h2,h3,h4{font-family:var(--hf);letter-spacing:-.03em}
+.mesh{position:fixed;inset:0;z-index:-3;background:radial-gradient(60% 50% at 90% 0%,color-mix(in srgb,var(--a1) 38%,transparent),transparent 70%),radial-gradient(55% 45% at 0% 100%,color-mix(in srgb,var(--a2) 55%,transparent),transparent 70%),var(--bg);transition:background .6s}
+.grid{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.5;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:60px 60px;-webkit-mask-image:radial-gradient(ellipse at 50% 10%,#000,transparent 70%);mask-image:radial-gradient(ellipse at 50% 10%,#000,transparent 70%)}
+.bgf{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bf{position:absolute;width:var(--w);left:var(--x);top:var(--y);opacity:.5;will-change:transform}
+.bf i{display:block;aspect-ratio:4/5;border-radius:18px;padding:6px;background:var(--card);border:1px solid var(--line);box-shadow:var(--sh);animation:drift var(--t) ease-in-out infinite alternate;transform:rotate(var(--r))}
+.bf img{width:100%;height:100%;object-fit:cover;border-radius:13px}
+@keyframes drift{to{transform:translateY(-24px) rotate(calc(var(--r)*-1))}}
+.bar{position:fixed;left:0;top:0;height:3px;width:0;z-index:150;background:linear-gradient(90deg,var(--a1),var(--a2))}
+.cur,.ring{position:fixed;left:0;top:0;z-index:400;pointer-events:none;border-radius:50%;display:none}
+.cur{width:7px;height:7px;margin:-3.5px;background:var(--a1)}.ring{width:38px;height:38px;margin:-19px;border:1.5px solid var(--a1);transition:width .3s var(--e),height .3s var(--e),margin .3s var(--e),background .3s}
+.ring.h{width:64px;height:64px;margin:-32px;background:color-mix(in srgb,var(--a1) 16%,transparent)}
+@media(pointer:fine){.fine .cur,.fine .ring{display:block}.fine,.fine a,.fine button{cursor:none}}
+.rip{position:fixed;z-index:390;width:14px;height:14px;margin:-7px;border-radius:50%;border:2px solid var(--a1);pointer-events:none;animation:rip .7s var(--e) forwards}@keyframes rip{to{transform:scale(7);opacity:0}}
+/* loader */
+#ld{position:fixed;inset:0;z-index:999;display:grid;place-items:center;overflow:hidden}
+.pn{position:absolute;left:0;right:0;height:50.2%;background:var(--bg);transition:transform 1s cubic-bezier(.77,0,.18,1)}.pn.t{top:0}.pn.b{bottom:0}
+#ld.done .t{transform:translateY(-101%)}#ld.done .b{transform:translateY(101%)}
+.po{position:absolute;width:clamp(96px,17vw,170px);left:var(--x);top:var(--y);padding:6px 6px 22px;background:#fff;border-radius:6px;box-shadow:0 20px 40px rgba(0,0,0,.28);opacity:0;transform:translateY(60px) rotate(0) scale(.7);animation:poi 1.2s var(--e) var(--d) forwards,pof 5s ease-in-out calc(var(--d) + 1.2s) infinite alternate}
+.po img{aspect-ratio:1;width:100%;object-fit:cover;border-radius:3px}
+@keyframes poi{to{opacity:.95;transform:translateY(0) rotate(var(--r)) scale(1)}}@keyframes pof{to{transform:translateY(-14px) rotate(calc(var(--r)*-.6))}}
+.vf{position:absolute;inset:22px;pointer-events:none;font:700 .74rem var(--bf);color:var(--acc);letter-spacing:.12em}
+.vf i{position:absolute;width:30px;height:30px;border:2px solid var(--a1)}.vf .c1{top:0;left:0;border-right:0;border-bottom:0}.vf .c2{top:0;right:0;border-left:0;border-bottom:0}.vf .c3{bottom:0;left:0;border-right:0;border-top:0}.vf .c4{bottom:0;right:0;border-left:0;border-top:0}
+.vf .rec{position:absolute;top:10px;left:46px}.vf .rec:before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#e5484d;margin-right:8px;animation:bl 1s steps(2) infinite}.vf .cn{position:absolute;top:10px;right:46px}
+.fc{position:absolute;left:50%;top:50%;width:90px;height:90px;margin:-45px;border:1.5px solid var(--a1);border-radius:50%;opacity:.7;animation:fz 2s var(--e) infinite}@keyframes fz{0%{transform:scale(2.6);opacity:0}60%{opacity:.8}100%{transform:scale(1);opacity:0}}
+.lc{position:relative;z-index:2;text-align:center;width:min(92vw,820px);padding:20px;transition:opacity .4s,transform .7s var(--e)}#ld.done .lc{opacity:0;transform:scale(1.06)}
+.sk{font:800 clamp(2rem,10vw,6rem)/1.05 var(--hf);letter-spacing:-.04em;white-space:nowrap;color:transparent;background:linear-gradient(100deg,var(--line) 30%,var(--a1) 50%,var(--line) 70%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;animation:shim 1.6s linear infinite}@keyframes shim{to{background-position:-250% 0}}
+.skl{display:flex;flex-direction:column;align-items:center;gap:10px;margin:20px 0}.skl b{display:block;height:10px;border-radius:9px;background:linear-gradient(100deg,var(--line) 30%,var(--a1) 50%,var(--line) 70%) 0 0/250% 100%;animation:shim 1.6s linear infinite}
+.lm{display:flex;justify-content:space-between;max-width:420px;margin:0 auto 8px;font:600 .8rem var(--bf);color:var(--mut)}.lbr{max-width:420px;height:4px;margin:auto;border-radius:4px;background:var(--line);overflow:hidden}.lbr span{display:block;height:100%;width:var(--p,0%);background:var(--a1)}
+.flash{position:absolute;inset:0;z-index:5;background:#fff;opacity:0;pointer-events:none}#ld.done .flash{animation:fl .7s ease-out}@keyframes fl{0%{opacity:.9}100%{opacity:0}}
+.js .rv{opacity:0;transform:translateY(30px);transition:opacity .9s var(--e),transform .9s var(--e);transition-delay:var(--d,0s)}.js .rv.in{opacity:1;transform:none}
+/* liquid glass nav */
+.nav{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:0;right:0;margin:auto;z-index:100;width:min(1120px,calc(100% - 20px));display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 8px 7px 12px;border-radius:999px;transform:translate3d(0,0,0);
+background:linear-gradient(135deg,var(--gl),rgba(255,255,255,.04));backdrop-filter:blur(22px) saturate(1.9) brightness(1.05);-webkit-backdrop-filter:blur(22px) saturate(1.9) brightness(1.05);border:1px solid rgba(255,255,255,.4);
+box-shadow:inset 0 1.5px 0 rgba(255,255,255,.65),inset 0 -1.5px 0 rgba(255,255,255,.15),inset 0 0 22px rgba(255,255,255,.12),0 12px 34px rgba(0,0,0,.18);overflow:hidden}
+.nav:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(180px circle at var(--lx,30%) 0,rgba(255,255,255,.5),transparent 70%);opacity:.55;mix-blend-mode:soft-light}
+.logo{position:relative;display:flex;align-items:center;gap:10px;font:800 .95rem var(--hf);white-space:nowrap}
+.mk{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font:800 .78rem var(--hf);background:var(--a1);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.links{position:relative;display:flex;gap:2px}.links a{position:relative;z-index:1;padding:8px 13px;border-radius:999px;font:700 .8rem var(--bf);color:var(--mut);transition:color .3s}.links a.on,.links a:hover{color:var(--ink)}
+.lq{position:absolute;top:0;left:0;height:100%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.2));box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 4px 14px rgba(0,0,0,.14);transition:transform .55s var(--e),width .55s var(--e);will-change:transform}
+.nr{position:relative;display:flex;gap:6px;align-items:center}
+.ib{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.18);display:grid;place-items:center;cursor:pointer;transition:transform .5s var(--e),background .3s}.ib:hover{background:var(--a1);color:#fff;transform:rotate(18deg) scale(1.06)}
+.ib svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}.burger{display:none}
+.pal{position:absolute;right:0;top:52px;display:flex;gap:10px;padding:10px 12px;border-radius:20px;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(20px);box-shadow:var(--sh);opacity:0;transform:translateY(-8px) scale(.95);pointer-events:none;transition:.4s var(--e)}.pal.o{opacity:1;transform:none;pointer-events:auto}
+.pal button{width:34px;height:34px;border-radius:50%;border:3px solid transparent;transition:.3s var(--e)}.pal button:hover{transform:scale(1.15)}.pal button.s{border-color:var(--ink)}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border-radius:999px;border:1px solid var(--line);font:700 .9rem var(--bf);cursor:pointer;transition:transform .4s var(--e),box-shadow .4s;isolation:isolate}
+.btn:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s var(--e)}.btn:hover:after{transform:translateX(120%)}.btn:active{transform:scale(.95)!important}
+.b1{background:var(--a1);color:#fff;border:0;box-shadow:0 14px 30px color-mix(in srgb,var(--a1) 45%,transparent)}.b2{background:var(--card)}.btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;transition:transform .3s}.btn:hover svg{transform:translateX(4px)}
+.sec{padding:110px 0 10px;position:relative}.sh{max-width:700px;margin-bottom:38px}.sh small{font:700 .82rem var(--bf);color:var(--acc)}
+.sh h2{font-size:clamp(2rem,5vw,3.3rem);line-height:1.05;margin:8px 0 12px}.sh h2 em{font-style:normal;color:var(--a1)}.sh p{color:var(--mut);max-width:560px}
+.card{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:24px;transition:transform .5s var(--e),border-color .3s,box-shadow .4s;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+.card:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(280px circle at var(--px,50%) var(--py,50%),color-mix(in srgb,var(--a1) 22%,transparent),transparent 70%)}
+.card:hover{border-color:var(--a1);box-shadow:var(--sh);transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-6px)}.card:hover:before{opacity:1}
+/* hero */
+.hero{min-height:100svh;padding:120px 0 40px;display:flex;flex-direction:column;justify-content:center}.hg{display:grid;grid-template-columns:1.1fr .9fr;gap:46px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border-radius:999px;border:1px solid var(--line);background:var(--card);font:700 .78rem var(--bf)}.pill i{width:8px;height:8px;border-radius:50%;background:var(--a1);animation:pl 2s infinite}@keyframes pl{0%{box-shadow:0 0 0 0 var(--a1)}70%,100%{box-shadow:0 0 0 9px transparent}}
+.hero h1{font-size:clamp(2.6rem,7.4vw,5.8rem);line-height:.96;letter-spacing:-.055em;margin:20px 0}.ln{display:block;overflow:hidden;padding-bottom:.08em}.ln span{display:block;transform:translateY(112%);transition:transform 1.1s var(--e);transition-delay:var(--d)}.hero h1.in .ln span{transform:none}
+.g{color:var(--a1)}.o{color:transparent;-webkit-text-stroke:1.5px var(--ink)}
+.typed{font:700 1rem var(--bf);color:var(--acc);min-height:1.7em}.typed s{display:inline-block;width:2px;height:1.1em;background:var(--a1);vertical-align:-3px;margin-left:3px;animation:bl 1s steps(2) infinite}@keyframes bl{50%{opacity:0}}
+.hd{color:var(--mut);max-width:520px;margin:10px 0 24px}.ha{display:flex;gap:12px;flex-wrap:wrap}
+.wd{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:30px;max-width:540px}.wd .card{padding:16px 18px}
+.clk b{display:block;font:800 2.3rem/1 var(--hf);letter-spacing:-.04em;font-variant-numeric:tabular-nums}.clk span{display:block;font:600 .84rem var(--bf);color:var(--mut);margin-top:6px}
+.wx{display:flex;align-items:center;gap:12px}.wx .em{font-size:2.2rem;line-height:1}.wx b{font:800 1.5rem var(--hf)}.wx span{display:block;font:600 .78rem var(--bf);color:var(--mut)}
+.mp{grid-column:1/-1;display:flex;align-items:center;gap:14px}.mp .cv{width:56px;height:56px;border-radius:14px;flex:none;background:var(--a1) center/cover;display:grid;place-items:center;color:#fff;font-size:1.4rem}.mp.pl .cv{animation:spin 6s linear infinite;border-radius:50%}@keyframes spin{to{transform:rotate(360deg)}}
+.mp .mi{flex:1;min-width:0}.mp b{display:block;font:700 .95rem var(--hf);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mp small{color:var(--mut);font-size:.78rem}.mp .pr{height:4px;border-radius:4px;background:var(--line);margin-top:8px;cursor:pointer;overflow:hidden}.mp .pr i{display:block;height:100%;width:0;background:var(--a1)}
+.mp .cb{display:flex;gap:6px}.mp .cb button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);cursor:pointer;transition:.3s var(--e);font-size:.9rem}.mp .cb button:hover{background:var(--a1);color:#fff;transform:scale(1.1)}.mp .cb .pp{background:var(--a1);color:#fff}
+.stage{perspective:1100px;position:relative;max-width:460px;margin-left:auto;width:100%}.fr{position:relative;transform-style:preserve-3d;transition:transform .3s ease-out}
+.main{padding:12px;border-radius:30px;background:var(--card);border:1px solid var(--line);box-shadow:var(--sh)}.main img,.main video{width:100%;aspect-ratio:4/4.6;object-fit:cover;border-radius:21px;background:var(--bg2)}
+.mini{position:absolute;width:36%;padding:7px;border-radius:20px;background:var(--card);border:1px solid var(--line);box-shadow:var(--sh);animation:bob 6s ease-in-out infinite;backdrop-filter:blur(8px)}.mini img{aspect-ratio:1;object-fit:cover;border-radius:14px;width:100%}
+.m1{left:-13%;top:10%;transform:translateZ(80px) rotate(-7deg)}.m2{right:-8%;bottom:-5%;transform:translateZ(60px) rotate(6deg);animation-delay:-3s}@keyframes bob{50%{margin-top:-14px}}
+.chip{position:absolute;left:14px;bottom:26px;padding:12px 17px;border-radius:16px;background:var(--a1);color:#fff;transform:translateZ(100px);box-shadow:var(--sh)}.chip b{display:block;font:700 .88rem var(--hf)}.chip small{font-size:.72rem;opacity:.85}
+.mq{margin-top:50px;border-block:1px solid var(--line);overflow:hidden;padding:14px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}.mt{display:flex;width:max-content;gap:44px;animation:mq 30s linear infinite;font:700 1.1rem var(--hf);color:var(--mut)}.mt span:after{content:"✦";margin-left:44px;color:var(--a1)}@keyframes mq{to{transform:translateX(-50%)}}
+/* carousel */
+.car{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px 2px 24px;-webkit-overflow-scrolling:touch}.car::-webkit-scrollbar{display:none}.car>*{scroll-snap-align:start;flex:none}
+.cn2{display:flex;gap:10px;justify-content:flex-end;margin-bottom:12px}
+.so{width:min(420px,82vw);height:230px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;border:0}.so .ti{font-size:2rem}.so h3{font-size:1.4rem}.so p{font-size:.86rem;opacity:.9}.so .go{font:700 .82rem var(--bf);align-self:flex-start;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.22);backdrop-filter:blur(8px)}
+.s-ig{background:linear-gradient(135deg,#f58529,#dd2a7b 55%,#8134af)}.s-tt{background:linear-gradient(135deg,#111,#25f4ee 140%)}.s-sp{background:linear-gradient(135deg,#1db954,#0b3d20)}.s-yt{background:linear-gradient(135deg,#ff3b30,#7a0d09)}.s-wa{background:linear-gradient(135deg,#25d366,#075e54)}
+.ac{width:min(340px,80vw);padding:22px}.th{margin:-22px -22px 16px;height:170px;overflow:hidden;cursor:zoom-in}.th img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--e)}.ac:hover .th img{transform:scale(1.08)}
+.at{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.3rem;background:color-mix(in srgb,var(--a1) 20%,transparent)}.yr{font:700 .76rem var(--bf);padding:5px 11px;border:1px solid var(--line);border-radius:999px;color:var(--mut)}.ac h3{font-size:1.15rem;margin-bottom:6px}.ac p{color:var(--mut);font-size:.9rem}
+/* struktur */
+.org{padding:34px 16px;border-radius:30px;text-align:center;overflow:hidden}.lv{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.nd{--c:#25d366;position:relative;min-width:190px;padding:16px 20px;border-radius:20px;background:color-mix(in srgb,var(--bg) 80%,transparent);border:1.5px solid var(--c);box-shadow:0 0 24px color-mix(in srgb,var(--c) 45%,transparent),inset 0 0 20px color-mix(in srgb,var(--c) 14%,transparent);transition:transform .5s var(--e),box-shadow .4s;animation:glow 3.4s ease-in-out infinite alternate}
+.nd:hover{transform:translateY(-6px) scale(1.04);box-shadow:0 0 40px var(--c),inset 0 0 24px color-mix(in srgb,var(--c) 25%,transparent)}@keyframes glow{to{box-shadow:0 0 38px color-mix(in srgb,var(--c) 70%,transparent),inset 0 0 20px color-mix(in srgb,var(--c) 14%,transparent)}}
+.nd.bl{--c:#3aa7ff}.nd.pk{--c:#ff5fa2}.nd small{display:block;font:700 .72rem var(--bf);color:var(--c);margin-bottom:2px}.nd strong{font:700 .98rem var(--hf)}.nd .av{width:64px;height:64px;margin:0 auto 10px}
+.vl{width:3px;height:36px;margin:0 auto;border-radius:3px;background:repeating-linear-gradient(180deg,var(--a1) 0 6px,transparent 6px 12px);background-size:100% 12px;animation:flow 1s linear infinite;transform-origin:top;transform:scaleY(0);transition:transform .8s var(--e)}.org.in .vl{transform:scaleY(1)}@keyframes flow{to{background-position:0 12px}}
+.av{width:90px;height:90px;border-radius:50%;padding:3px;margin:0 auto 12px;background:conic-gradient(var(--a1),var(--a2),var(--bg2),var(--a1));transition:.6s var(--e)}.av img,.av span{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--bg)}.av span{display:grid;place-items:center;font:800 1.3rem var(--hf);background:var(--bg2);color:var(--acc)}.card:hover .av{transform:rotate(10deg) scale(1.06)}
+/* members & gallery paging */
+.tools{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.q{flex:1;min-width:240px;max-width:420px;padding:13px 20px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 .92rem var(--bf);outline:0;transition:.3s}.q:focus{border-color:var(--a1);box-shadow:0 0 0 4px color-mix(in srgb,var(--a1) 25%,transparent)}.ct{font:600 .82rem var(--bf);color:var(--mut)}
+.pg{display:grid;gap:14px;transition:opacity .2s,transform .2s}.pg.sw{opacity:0;transform:translateY(12px)}.pg>*{animation:pop .6s var(--e) both;animation-delay:calc(var(--i,0)*.05s)}@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}}
+.mg{grid-template-columns:repeat(4,1fr)}.gg{grid-template-columns:repeat(3,1fr)}
+.mb{padding:22px 14px 18px;text-align:center}.mb h4{font-size:1rem;line-height:1.3}.mr{font:700 .76rem var(--bf);color:var(--mut);margin:4px 0 12px}.mr.k{color:var(--acc)}
+.ig{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:8px 14px;border-radius:999px;border:1px solid var(--line);font:700 .78rem var(--bf);transition:.3s}.ig:hover{background:var(--a1);color:#fff;border-color:var(--a1)}.ig.off{opacity:.45;pointer-events:none}
+.pn2{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:24px;flex-wrap:wrap}.pn2 button{min-width:42px;height:42px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);font:700 .85rem var(--bf);cursor:pointer;transition:.3s var(--e)}.pn2 button:hover{transform:translateY(-3px);border-color:var(--a1)}.pn2 button.s{background:var(--a1);color:#fff;border-color:var(--a1)}.pn2 button:disabled{opacity:.35;pointer-events:none}
+.sht{border-radius:22px;overflow:hidden;position:relative;cursor:zoom-in;border:1px solid var(--line);aspect-ratio:4/3;background:var(--bg2)}.sht img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--e)}.sht:hover img{transform:scale(1.08)}
+.sht figcaption{position:absolute;inset:auto 0 0;padding:40px 14px 12px;color:#fff;font:700 .85rem var(--hf);background:linear-gradient(transparent,rgba(5,12,8,.85));transform:translateY(100%);transition:transform .5s var(--e)}.sht:hover figcaption{transform:none}
+.em2{display:none;text-align:center;padding:40px;color:var(--mut)}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:24px;background:var(--card);-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:740px}th,td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line);font-size:.9rem}
+th{font:700 .8rem var(--bf);color:var(--acc);background:var(--bg2);white-space:nowrap}tr:last-child td{border-bottom:0}td:first-child,th:first-child{position:sticky;left:0;background:var(--bg2);font-weight:700;white-space:nowrap;z-index:1}
+tbody tr:hover{background:color-mix(in srgb,var(--a1) 10%,transparent)}tr.today{background:color-mix(in srgb,var(--a1) 18%,transparent)}.tag{margin-left:8px;padding:2px 9px;border-radius:999px;background:var(--a1);color:#fff;font:700 .66rem var(--bf)}
+.act{display:inline-block;padding:5px 12px;border-radius:999px;background:color-mix(in srgb,var(--a1) 22%,transparent);font-weight:700;font-size:.82rem}.dm{color:var(--mut)}.tn{font-size:.78rem;color:var(--mut);margin:10px 4px}
+.sub{display:flex;align-items:center;gap:14px;margin:44px 0 16px;font:700 1.3rem var(--hf)}.sub:after{content:"";flex:1;height:1px;background:var(--line)}
+.agg{display:grid;grid-template-columns:1fr 1fr;gap:14px}.ae{display:flex;gap:18px;padding:22px}.ai{width:54px;height:54px;border-radius:17px;flex:none;display:grid;place-items:center;font-size:1.4rem;background:var(--a1)}.ae small{font:700 .76rem var(--bf);color:var(--acc)}.ae h4{font-size:1.1rem;margin:3px 0}.ae p{color:var(--mut);font-size:.9rem}
+/* footer */
+footer{margin-top:110px;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--a3) 30%,var(--bg2)));border-top:1px solid var(--line);padding:60px 0 0}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1.2fr 1.2fr;gap:34px}.fg h4{font-size:1rem;margin-bottom:14px;color:var(--acc)}.fg p,.fg li{color:var(--mut);font-size:.92rem}.fg ul{list-style:none;display:grid;gap:8px}.fg li a{transition:.3s}.fg li a:hover{color:var(--a1);padding-left:6px}
+.fb{margin-top:40px;padding:20px 0 calc(24px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:700 .78rem var(--bf);color:var(--mut)}
+.top{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(10px);cursor:pointer;opacity:0;transform:translateY(20px);pointer-events:none;transition:.4s var(--e)}.top.s{opacity:1;transform:none;pointer-events:auto}
+.lbx{position:fixed;inset:0;z-index:300;background:rgba(5,9,7,.93);display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s}.lbx.o{opacity:1;pointer-events:auto}.lbx figure{text-align:center;color:#fff;transform:scale(.94);transition:transform .5s var(--e)}.lbx.o figure{transform:none}.lbx img{max-width:100%;max-height:76vh;border-radius:16px;margin:auto;transition:opacity .25s}.lbx figcaption{margin-top:12px;font-weight:700}.lbx small{display:block;opacity:.6;font-weight:500}
+.lbx button{position:absolute;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font-size:1.1rem;cursor:pointer}.lbx .x{top:16px;right:16px}.lbx .p{left:16px;top:50%}.lbx .n{right:16px;top:50%}
+@media(max-width:1000px){.links{position:fixed;inset:0;flex-direction:column;justify-content:center;align-items:center;background:var(--bg);opacity:0;pointer-events:none;transition:opacity .35s;z-index:-1}.links.open{opacity:1;pointer-events:auto}.links a{font:700 1.5rem var(--hf);padding:12px 26px}.lq{display:none}.links a.on{color:var(--a1)}.burger{display:grid}.hg{grid-template-columns:1fr}.stage{margin:10px auto 0;max-width:420px}.mg{grid-template-columns:repeat(3,1fr)}.fg{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.wrap{width:calc(100% - 28px)}.sec{padding:84px 0 10px}.agg{grid-template-columns:1fr}.mg{grid-template-columns:repeat(2,1fr);gap:10px}.gg{grid-template-columns:repeat(2,1fr);gap:10px}.av{width:78px;height:78px}.m1{left:-4%}.m2{right:-2%}.wd{grid-template-columns:1fr}.tools{flex-direction:column;align-items:stretch}.q{max-width:none}.sht figcaption{transform:none;font-size:.72rem;padding:26px 10px 8px}.lbx .p,.lbx .n{top:auto;bottom:22px}.bf{opacity:.28}.fg{grid-template-columns:1fr}.nd{min-width:150px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.js .rv{opacity:1;transform:none}.ln span{transform:none}}
+</style>
+<style>
+:root{--a1:#56692f;--a2:#dfe4d3;--a3:#2c381a;--bg:color-mix(in srgb,var(--a2) 40%,#f2f3f0);--bg2:color-mix(in srgb,var(--a2) 85%,#f2f3f0);--card:linear-gradient(135deg,rgba(255,255,255,.68),rgba(255,255,255,.28));--gb:rgba(255,255,255,.65);--hi:var(--a1);--mut:#56605a}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:color-mix(in srgb,var(--a3) 20%,#0f1210);--bg2:color-mix(in srgb,var(--a3) 34%,#0f1210);--card:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04));--gb:rgba(255,255,255,.2);--hi:color-mix(in srgb,var(--a1) 55%,#fff);--mut:#a3aca6}}
+:root[data-theme="dark"]{--bg:color-mix(in srgb,var(--a3) 20%,#0f1210);--bg2:color-mix(in srgb,var(--a3) 34%,#0f1210);--card:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04));--gb:rgba(255,255,255,.2);--hi:color-mix(in srgb,var(--a1) 55%,#fff);--mut:#a3aca6}
+.mesh{background:radial-gradient(60% 50% at 90% 0%,color-mix(in srgb,var(--a1) 26%,transparent),transparent 70%),radial-gradient(55% 45% at 0% 100%,rgba(150,158,150,.3),transparent 70%),var(--bg)}
+.sh h2 em,.g{color:var(--hi)}
+/* liquid glass di semua elemen */
+.card,.pill,.b2,.tw,.q,.pn2 button,.mini,.main,.top,.stabs,.stile,.pal{background:var(--card);border:1px solid var(--gb);backdrop-filter:blur(16px) saturate(1.7);-webkit-backdrop-filter:blur(16px) saturate(1.7);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.1),var(--sh)}
+.pal{background:var(--bg2)}.card:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 38%);opacity:.5;mix-blend-mode:soft-light}
+.card:hover{border-color:var(--a1)}.pn2 button.s{background:var(--a1);color:#fff}
+/* fix: popover palet tidak terpotong */
+.nav{overflow:visible}.nav:before{border-radius:inherit}.pal{z-index:5}
+/* loader: overlay foto hilang spontan */
+#ld.done .po,#ld.done .vf,#ld.done .fc{display:none}
+/* struktur: ikut warna tema */
+.nd{--c:var(--a1);max-width:250px;width:min(250px,86%)}.nd small{color:var(--hi)}.nd:hover{box-shadow:0 0 36px var(--c),inset 0 0 24px color-mix(in srgb,var(--c) 25%,transparent)}
+.nd{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.nm{overflow:hidden;white-space:nowrap;max-width:100%}.nm span{display:inline-block}.nm span.mv{animation:nmv 6s ease-in-out infinite alternate}@keyframes nmv{0%,14%{transform:translateX(0)}86%,100%{transform:translateX(var(--sc))}}
+.mb h4.nm,.nd strong.nm{display:block;text-align:center}
+/* widget perangkat */
+.wd{grid-template-columns:1fr 1fr}.wx{cursor:pointer}.dv{display:flex;align-items:center;gap:12px}.dvi{width:44px;height:44px;flex:none;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--a1) 22%,transparent)}
+.dvi svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.dv b{display:block;font:800 1.2rem/1.1 var(--hf)}.dv span{font:600 .78rem var(--bf);color:var(--mut)}
+.bt{position:relative;width:26px;height:13px;border:2px solid currentColor;border-radius:4px}.bt:after{content:"";position:absolute;right:-5px;top:2px;width:3px;height:5px;background:currentColor;border-radius:0 2px 2px 0}.bt i{position:absolute;left:1px;top:1px;bottom:1px;width:var(--w,50%);background:currentColor;border-radius:1px;transition:width .6s}.bt.low{color:#e5484d}
+/* sosial */
+.stabs{display:flex;gap:6px;padding:6px;border-radius:999px;width:max-content;max-width:100%;margin-bottom:18px;overflow:auto}.stabs button{padding:11px 20px;border-radius:999px;font:700 .9rem var(--bf);cursor:pointer;transition:.4s var(--e);white-space:nowrap}.stabs button:hover{background:rgba(255,255,255,.14)}.stabs button.s{background:var(--a1);color:#fff;box-shadow:0 8px 20px color-mix(in srgb,var(--a1) 40%,transparent)}
+.spanel{padding:24px}.sph{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}.sph h3{font-size:1.5rem}.sph p{color:var(--mut)}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.stile{position:relative;display:block;overflow:hidden;border-radius:20px;aspect-ratio:1;animation:pop .6s var(--e) both;animation-delay:calc(var(--i)*.06s);transition:transform .5s var(--e)}
+.spanel[data-k=tt] .stile{aspect-ratio:9/14}.spanel[data-k=ig] .stile{aspect-ratio:4/5}.stile img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--e)}.stile:hover{transform:translateY(-6px)}.stile:hover img{transform:scale(1.08)}
+.stile span{position:absolute;inset:auto 0 0;padding:28px 12px 10px;color:#fff;font:700 .8rem var(--bf);background:linear-gradient(transparent,rgba(0,0,0,.7))}
+/* galeri */
+.gg{grid-template-columns:repeat(4,1fr)}.lg{grid-template-columns:repeat(2,1fr)}.sht{aspect-ratio:3/4}.sht.ls{aspect-ratio:16/9}
+/* jadwal */
+table.sch{min-width:1120px}td[colspan]{text-align:center}.brk{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--line);font-weight:700;font-size:.8rem}
+@media(max-width:1000px){.gg{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){.gg{grid-template-columns:repeat(2,1fr)}.lg{grid-template-columns:1fr}.wd{grid-template-columns:1fr 1fr}.clk,.nc{grid-column:1/-1}.clk b{font-size:2rem}.sgrid{grid-template-columns:repeat(2,1fr)}.spanel{padding:16px}}
+/* tema ikut warna pilihan */
+:root{--ink:color-mix(in srgb,var(--a3) 45%,#0c0e0c)}
+.mesh{background:radial-gradient(60% 50% at 90% 0%,color-mix(in srgb,var(--a1) 28%,transparent),transparent 70%),radial-gradient(55% 45% at 0% 100%,color-mix(in srgb,var(--a1) 22%,transparent),transparent 70%),var(--bg)}
+.sc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.scd{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:28px;min-height:270px}
+.scd .gw{position:absolute;right:-70px;top:-70px;width:220px;height:220px;border-radius:50%;background:var(--b);filter:blur(64px);opacity:.38;pointer-events:none}
+.lgo{position:relative;width:74px;height:74px;border-radius:23px;display:grid;place-items:center;background:var(--b);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),0 14px 30px rgba(0,0,0,.25)}.lgo svg{width:40px;height:40px}
+.scd h3{position:relative;font-size:1.6rem}.scd p{position:relative;color:var(--mut)}.scd .go{position:relative;margin-top:auto}
+@media(max-width:1000px){.sc{grid-template-columns:1fr}.scd{min-height:0}}
+</style>
+<noscript><style>#ld{display:none}.rv{opacity:1!important;transform:none!important}.ln span{transform:none}body.lock{overflow:auto}</style></noscript>
 </head>
 <body class="lock">
+<div id="ld"><div class="pn t"></div><div class="pn b"></div>
+<div class="po" style="--x:8%;--y:14%;--r:-8deg;--d:.2s"><img alt=""></div><div class="po" style="--x:76%;--y:10%;--r:7deg;--d:.5s"><img alt=""></div><div class="po" style="--x:4%;--y:62%;--r:6deg;--d:.8s"><img alt=""></div><div class="po" style="--x:80%;--y:58%;--r:-6deg;--d:1.1s"><img alt=""></div><div class="po" style="--x:40%;--y:76%;--r:3deg;--d:1.4s"><img alt=""></div>
+<div class="vf"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><span class="rec">REC</span><span class="cn" id="lcn">IMG_0001</span></div><div class="fc"></div>
+<div class="lc"><div class="sk">XI AL GHOZALI</div><div class="skl"><b style="width:62%"></b><b style="width:44%"></b><b style="width:54%"></b></div><div class="lm"><span id="ls">Menyiapkan kelas…</span><span id="lnn">0%</span></div><div class="lbr"><span></span></div></div><div class="flash"></div></div>
+<div class="mesh"></div><div class="grid"></div><div class="bgf" id="bgf"></div><div class="bar" id="bar"></div><div class="cur" id="cur"></div><div class="ring" id="ring"></div>
 
-  <!-- ================= LOADING SCREEN ================= -->
-  <div id="loader" aria-label="Memuat">
-    <div class="ld-panel t"></div><div class="ld-panel b"></div>
-    <div class="ld-center">
-      <i class="c c1"></i><i class="c c2"></i><i class="c c3"></i><i class="c c4"></i>
-      <div class="ld-radar" aria-hidden="true">
-        <svg viewBox="0 0 80 80" fill="none">
-          <circle cx="40" cy="40" r="36" stroke="rgba(185,204,124,.25)" stroke-width="1"/>
-          <circle cx="40" cy="40" r="24" stroke="rgba(185,204,124,.18)" stroke-width="1"/>
-          <circle class="dash" cx="40" cy="40" r="32" stroke="#7a8c3c" stroke-width="1.5" stroke-dasharray="4 10"/>
-          <g class="sweep"><path d="M40 40 L40 4 A36 36 0 0 1 72 22 Z" fill="url(#sg)"/></g>
-          <circle cx="40" cy="40" r="3" fill="#d4e3a2"/>
-          <defs><linearGradient id="sg" x1="40" y1="4" x2="72" y2="22"><stop stop-color="#b9cc7c" stop-opacity=".7"/><stop offset="1" stop-color="#b9cc7c" stop-opacity="0"/></linearGradient></defs>
-        </svg>
-      </div>
-      <div class="ld-tag">// Class Briefing</div>
-      <h1 class="ld-title" aria-label="XI AL GHOZALI"><span class="ld-ghost">XI AL GHOZALI</span><span class="ld-fill" id="ldFill">XI AL GHOZALI</span><span class="ld-scan"></span></h1>
-      <div class="ld-meta"><span id="ldStatus">Menyiapkan kelas…</span><b id="ldNum">000%</b></div>
-      <div class="ld-bar"><span></span></div>
-    </div>
-  </div>
+<header class="nav" id="nav"><a class="logo" href="#home"><span class="mk">XI</span><span id="brand"></span></a>
+<nav class="links" id="links"><i class="lq" id="lq"></i><a href="#home">Beranda</a><a href="#media">Media</a><a href="#struktur">Struktur</a><a href="#anggota">Anggota</a><a href="#galeri">Galeri</a><a href="#prestasi">Prestasi</a><a href="#jadwal">Jadwal</a></nav>
+<div class="nr"><button class="ib" id="pal" aria-label="Pilih warna tema"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 1.5-2-.6-1.2.2-2.5 1.6-2.5H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/></svg></button>
+<button class="ib" id="theme" aria-label="Ganti mode terang atau gelap"><svg class="moon" viewBox="0 0 24 24"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg><svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+<button class="ib burger" id="burger" aria-label="Buka menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg></button>
+<div class="pal" id="palp"><button data-p="green" style="background:#17a34a" aria-label="Hijau"></button><button data-p="ice" style="background:#2b94de" aria-label="Ice blue"></button><button data-p="pink" style="background:#e0558f" aria-label="Pink soft"></button></div></div></header>
 
-  <div class="bg-grid"></div><div class="blob b1"></div><div class="blob b2"></div><div class="glow" id="glow"></div>
-  <div class="progress" id="progress"></div>
+<main>
+<section class="hero" id="home"><div class="wrap"><div class="hg"><div>
+<div class="pill rv"><i></i><span id="pill"></span></div>
+<h1 id="h1"><span class="ln"><span style="--d:.05s">Welcome to</span></span><span class="ln"><span class="g" style="--d:.18s">XI AL</span></span><span class="ln"><span class="o" style="--d:.31s">GHOZALI.</span></span></h1>
+<div class="typed rv"><span id="typed"></span><s></s></div><p class="hd rv" id="desc"></p>
+<div class="ha rv"><a class="btn b1" href="#anggota">Kenali kelas kami <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn b2" href="#galeri">Lihat kenangan</a></div>
+<div class="wd rv"><div class="card clk"><b id="clock">--:--</b><span id="dateTxt"></span><span id="greet"></span></div><div class="card wx" id="wxCard" title="Ketuk untuk memakai lokasimu"><div class="em" id="wxE">🌤️</div><div><b id="wxT">--°C</b><span id="wxD">Memuat cuaca…</span><span id="wxC"></span></div></div>
+<div class="card dv" id="batC"><div class="dvi" id="batI">🔋</div><div><b id="batT">--%</b><span id="batS">Baterai</span></div></div><div class="card dv nc" id="netC"><div class="dvi" id="netI"></div><div><b id="netT">Jaringan</b><span id="netS"></span></div></div>
+<div class="card mp" id="mp"><div class="cv" id="mpC">♪</div><div class="mi"><b id="mpT"></b><small id="mpA"></small><div class="pr" id="mpP"><i id="mpI"></i></div></div><div class="cb"><button id="mpPr" aria-label="Sebelumnya">⏮</button><button class="pp" id="mpPl" aria-label="Putar atau jeda">▶</button><button id="mpN" aria-label="Berikutnya">⏭</button></div></div></div>
+</div>
+<div class="stage rv"><div class="fr" id="fr"><div class="main" id="mainBox"></div><div class="mini m1"><img id="mi1" alt=""></div><div class="mini m2"><img id="mi2" alt=""></div><div class="chip"><b id="hn"></b><small id="hs"></small></div></div></div></div>
+<div class="mq" aria-hidden="true"><div class="mt" id="mq"></div></div></div></section>
 
-  <header class="nav" id="nav">
-    <a class="logo" href="#home"><span class="lg-mark">XI</span><span id="brandName">XI AL GHOZALI</span></a>
-    <nav class="links" id="links">
-      <a href="#home">Beranda</a><a href="#profil">Profil</a><a href="#anggota">Anggota</a><a href="#prestasi">Prestasi</a><a href="#galeri">Galeri</a><a href="#jadwal">Jadwal</a><a href="#agenda">Agenda</a>
-    </nav>
-    <button class="burger" id="burger" aria-label="Buka menu" aria-expanded="false"><span></span><span></span></button>
-  </header>
+<section class="sec" id="media"><div class="wrap"><div class="sh rv"><small>Media sosial</small><h2>Tiga ruang, <em>satu perjalanan</em></h2><p>Temukan kelas kami di Instagram, TikTok, dan Spotify.</p></div>
+<div class="sc" id="sc"></div></div></section>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero" id="home">
-      <canvas id="fx" aria-hidden="true"></canvas>
-      <div class="container">
-        <div class="hero-grid">
-          <div>
-            <div class="pill rv"><span class="dot"></span><span id="heroPill">Sekolah · 2026 / 2027</span></div>
-            <h1 id="heroTitle"><span class="ln"><span style="--d:.05s">Satu kelas.</span></span><span class="ln"><span class="acc2" style="--d:.18s">Satu cerita.</span></span><span class="ln"><span class="acc" style="--d:.31s">Selamanya.</span></span></h1>
-            <div class="typed rv" style="--d:.2s"><span id="typed"></span><span class="cur"></span></div>
-            <p class="hero-copy rv" style="--d:.3s" id="heroDesc"></p>
-            <div class="hero-actions rv" style="--d:.4s">
-              <a class="btn btn-primary" href="#anggota">Kenali Kelas Kami <i class="fa-solid fa-arrow-right"></i></a>
-              <a class="btn btn-ghost" href="#galeri">Lihat Kenangan</a>
-            </div>
-            <div class="stats">
-              <div class="stat card rv" style="--d:.45s"><strong data-count id="stMembers">0</strong><span>Anggota</span></div>
-              <div class="stat card rv" style="--d:.55s"><strong data-count id="stAwards">0</strong><span>Prestasi</span></div>
-              <div class="stat card rv" style="--d:.65s"><strong data-count id="stPhotos">0</strong><span>Foto</span></div>
-            </div>
-          </div>
-          <div class="frame-wrap rv" style="--d:.25s">
-            <div class="frame" id="tilt">
-              <img id="heroImg" alt="Foto bersama kelas" />
-              <div class="chip-float" id="heroChip">XI · AL GHOZALI</div>
-              <div class="note"><b id="heroNote">Kelas Kita, Cerita Kita</b><small id="heroSchool">Sekolah · Tahun ajaran</small></div>
-            </div>
-          </div>
-        </div>
-        <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
-      </div>
-    </section>
+<section class="sec" id="struktur"><div class="wrap"><div class="sh rv"><small>Struktur</small><h2>Struktur <em>organisasi</em> kelas</h2><p>Dari wali kelas sampai pengurus. Arahkan kursor ke kartunya.</p></div><div class="org card rv" id="org"></div></div></section>
 
-    <!-- PROFIL -->
-    <section class="section" id="profil"><div class="container">
-      <div class="sec-head rv"><span class="eyebrow">01 · People behind our class</span><h2>Profil <em>Sekolah</em> &amp; Wali Kelas</h2><p>Orang-orang yang membimbing dan mendukung perjalanan kami di sekolah.</p></div>
-      <div class="profile-grid" id="leaders"></div>
-      <div class="subhead rv">Pengurus Kelas</div>
-      <div class="officers" id="officers"></div>
-    </div></section>
+<section class="sec" id="anggota"><div class="wrap"><div class="sh rv"><small>Anggota</small><h2>Anggota <em>kelas</em></h2><p>Di bawah profil anggota terdapat username Instagram sesuai anggota.</p></div>
+<div class="tools rv"><input class="q" id="q" type="search" placeholder="Cari nama atau username…" autocomplete="off" aria-label="Cari anggota"><div class="ct">Menampilkan <b id="shn"></b> dari <b id="tot"></b> anggota</div></div>
+<div class="pg mg" id="members"></div><div class="em2" id="em2">Tidak ada anggota yang cocok. Coba kata kunci lain.</div><div class="pn2" id="pnM"></div></div></section>
 
-    <!-- ANGGOTA -->
-    <section class="section" id="anggota"><div class="container">
-      <div class="sec-head rv"><span class="eyebrow">02 · Our little community</span><h2>Struktur &amp; <em>Anggota</em> Kelas</h2><p>Semua anggota beserta akun Instagram-nya ada di satu tempat, tinggal cari namanya.</p></div>
-      <div class="org rv">
-        <div class="org-title"><span class="eyebrow" style="justify-content:center">Class organization</span><h3 id="orgTitle">Struktur Organisasi Kelas</h3></div>
-        <div class="tree" id="tree"></div>
-      </div>
-      <div class="tools rv">
-        <label class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" placeholder="Cari nama atau username Instagram…" autocomplete="off"></label>
-        <div class="count">Menampilkan <b id="shown">0</b> dari <b id="total">0</b> anggota</div>
-      </div>
-      <div class="member-grid" id="members"></div>
-      <div class="empty" id="empty">// tidak ada anggota yang cocok</div>
-    </div></section>
+<section class="sec" id="galeri"><div class="wrap"><div class="sh rv"><small>Galeri</small><h2>Galeri <em>kenangan</em></h2><p>Ketuk foto untuk memperbesar, lalu pindah halaman dengan tombol di bawah.</p></div>
+<div class="pg gg" id="gal"></div><div class="pn2" id="pnG"></div><div class="sub rv">Foto landscape</div><div class="pg lg" id="gal2"></div><div class="pn2" id="pnL"></div></div></section>
 
-    <!-- PRESTASI -->
-    <section class="section" id="prestasi"><div class="container">
-      <div class="sec-head rv"><span class="eyebrow">03 · Milestones &amp; achievements</span><h2>Prestasi &amp; <em>Pencapaian</em></h2><p>Setiap usaha punya cerita. Klik kartu yang punya foto sertifikat untuk melihatnya lebih besar.</p></div>
-      <div class="ach-grid" id="achievements"></div>
-    </div></section>
+<section class="sec" id="prestasi"><div class="wrap"><div class="sh rv"><small>Prestasi</small><h2>Prestasi &amp; <em>pencapaian</em></h2><p>Geser ke samping. Ketuk kartu berfoto untuk memperbesar.</p></div>
+<div class="cn2"><button class="ib" data-car="ach" data-d="-1" aria-label="Geser kiri">‹</button><button class="ib" data-car="ach" data-d="1" aria-label="Geser kanan">›</button></div><div class="car" id="ach"></div></div></section>
 
-    <!-- GALERI -->
-    <section class="section" id="galeri"><div class="container">
-      <div class="sec-head rv"><span class="eyebrow">04 · Captured moments</span><h2>Galeri <em>Kenangan</em></h2><p>Potongan kecil dari hari-hari yang kelak akan selalu kita ingat. Ketuk foto untuk memperbesar.</p></div>
-      <div class="masonry" id="gallery"></div>
-      <div class="more"><button class="btn btn-ghost" id="moreBtn">Muat lebih banyak <i class="fa-solid fa-chevron-down"></i></button></div>
-    </div></section>
+<section class="sec" id="jadwal"><div class="wrap"><div class="sh rv"><small>Jadwal</small><h2>Jadwal <em>pelajaran</em></h2><p>Sabtu sampai Kamis. Hari ini ditandai otomatis.</p></div>
+<div class="tw rv"><table class="sch"><thead id="lh"></thead><tbody id="lbd"></tbody></table></div><p class="tn">Geser tabel ke samping di layar kecil.</p>
+<div class="sub rv">Jadwal piket</div><div class="tw rv"><table style="min-width:620px"><thead><tr><th>Hari</th><th>Petugas</th><th>Tugas</th></tr></thead><tbody id="cb"></tbody></table></div>
+<div class="sub rv">Agenda Sekolah</div><div class="agg" id="agl"></div></div></section>
+</main>
 
-    <!-- CATATAN -->
-    <section class="section" id="catatan"><div class="container">
-      <div class="sec-head rv"><span class="eyebrow">05 · Words to remember</span><h2>Catatan <em>untuk Kita</em></h2></div>
-      <div class="quote-grid" id="quotes"></div>
-    </div></section>
+<footer><div class="wrap"><div class="fg">
+<div><h3 style="font-size:1.5rem" id="fb1"></h3><p id="fq" style="margin-top:10px;max-width:320px"></p></div>
+<div><h4>Quick link</h4><ul><li><a href="#home">Beranda</a></li><li><a href="#media">Media sosial</a></li><li><a href="#struktur">Struktur kelas</a></li><li><a href="#anggota">Anggota</a></li><li><a href="#galeri">Galeri</a></li><li><a href="#prestasi">Prestasi</a></li></ul></div>
+<div><h4>Address</h4><p id="addr"></p></div><div><h4>Created by</h4><p id="cr"></p></div></div>
+<div class="fb"><span id="fcp"></span><span>BUILT WITH ♥ FOR <span id="fcn"></span></span></div></div></footer>
+<button class="top" id="top" aria-label="Kembali ke atas">↑</button>
+<div class="lbx" id="lbx" role="dialog" aria-modal="true" aria-label="Pratinjau foto"><button class="x" id="lx" aria-label="Tutup">✕</button><button class="p" id="lp" aria-label="Sebelumnya">‹</button><button class="n" id="ln2" aria-label="Berikutnya">›</button><figure><img id="li" alt=""><figcaption><span id="lc"></span><small id="lk"></small></figcaption></figure></div>
 
-    <!-- JADWAL -->
-    <section class="section" id="jadwal"><div class="container">
-      <div class="sec-head rv"><span class="eyebrow">06 · Weekly class plan</span><h2>Jadwal <em>Pelajaran</em></h2><p>Dari Sabtu sampai Kamis. Hari ini ditandai otomatis.</p></div>
-      <div class="table-wrap rv"><table><thead id="lessonHead"></thead><tbody id="lessonBody"></tbody></table></div>
-      <p class="tnote">* Geser tabel ke samping jika layar kecil.</p>
-      <div class="subhead rv">Jadwal Piket Kelas</div>
-      <div class="table-wrap rv"><table style="min-width:620px"><thead><tr><th>Hari</th><th>Petugas Piket</th><th>Tugas / Catatan</th></tr></thead><tbody id="cleanBody"></tbody></table></div>
-    </div></section>
-
-    <!-- AGENDA -->
-    <section class="section" id="agenda"><div class="container">
-      <div class="sec-head rv"><span class="eyebrow">07 · Don't miss the moment</span><h2>Agenda &amp; <em>Kegiatan</em> Kelas</h2><p>Kegiatan rutin dan agenda penting kelas supaya tidak ada yang terlewat.</p></div>
-      <div class="agenda-grid" id="agendaList"></div>
-
-      <div class="closing rv">
-        <span class="eyebrow" style="justify-content:center">Our story continues</span>
-        <h2>Berbeda cerita,<br>satu keluarga.</h2>
-        <p id="closingText"></p>
-        <a class="btn btn-primary" href="#home">Kembali ke Atas <i class="fa-solid fa-arrow-up"></i></a>
-        <div class="socials" id="classSocial"></div>
-      </div>
-    </div></section>
-  </main>
-
-  <footer class="footer"><div class="container footer-inner"><span>© <span id="year"></span> <b id="footerClass">XI AL GHOZALI</b> · Dibuat untuk menyimpan cerita kita.</span><span id="footerSchool"></span></div></footer>
-  <button class="backtop" id="backTop" aria-label="Kembali ke atas"><i class="fa-solid fa-arrow-up"></i></button>
-
-  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Pratinjau foto">
-    <button class="x" id="lbX" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
-    <button class="pv" id="lbP" aria-label="Sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
-    <button class="nx" id="lbN" aria-label="Berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
-    <figure><img id="lbImg" alt=""><figcaption><span id="lbCap"></span><small id="lbCount"></small></figcaption></figure>
-  </div>
-
-  <!-- ================= LOADER LOGIC (terpisah agar selalu jalan) ================= -->
-  <script>
-  (function(){
-    var L=document.getElementById('loader'),num=document.getElementById('ldNum'),st=document.getElementById('ldStatus');
-    var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var minT=reduce?500:2600,start=performance.now(),loaded=document.readyState==='complete',p=0,done=false;
-    var msgs=['Menyiapkan kelas…','Memanggil anggota…','Memuat kenangan…','Merapikan galeri…','Siap berangkat'];
-    window.addEventListener('load',function(){loaded=true});
-    function finish(){
-      if(done)return;done=true;
-      L.style.setProperty('--p','100%');num.textContent='100%';st.textContent='Siap berangkat';
-      setTimeout(function(){
-        L.classList.add('done');document.body.classList.remove('lock');window.__ready=true;
-        window.dispatchEvent(new Event('siteready'));
-        setTimeout(function(){L.remove()},1300);
-      },280);
-    }
-    function tick(now){
-      if(done)return;
-      var t=now-start,target=loaded?100:88;
-      p+=(target-p)*0.045;
-      var shown=Math.min(100,Math.round(p));
-      L.style.setProperty('--p',p.toFixed(1)+'%');
-      num.textContent=String(shown).padStart(3,'0')+'%';
-      st.textContent=msgs[Math.min(msgs.length-2,Math.floor(p/25))];
-      if(p>=99.4&&t>=minT){finish();return}
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-    setTimeout(finish,7000); // cadangan: jangan sampai loading menggantung
-  })();
-  </script>
-
-  <script>
-    // ============================ DATA WEBSITE ============================
-    // PANDUAN EDIT: ganti semua teks contoh di bawah dengan data kelasmu.
-    //  - Foto = URL gambar langsung (contoh: https://domain.com/foto.jpg). Kosongkan ("") bila belum ada.
-    //  - Instagram: isi username saja tanpa @. Kosongkan bila tidak ada.
-    //  - Pengurus kelas diambil otomatis dari anggota yang role-nya
-    //    "Ketua Kelas", "Wakil Ketua", "Sekretaris", "Bendahara".
-    //  - Tambah foto galeri: salin satu baris {image:"URL",caption:"Keterangan"}.
-    const DATA = {
-      className: "XI AL GHOZALI",
-      school: "NAMA SEKOLAH",
-      year: "2026 / 2027",
-      classDescription: "Bukan sekadar ruang belajar, tetapi tempat banyak cerita dimulai, persahabatan tumbuh, dan kenangan tercipta.",
-      heroImage: "",
-      heroNote: "Kelas Kita, Cerita Kita",
-      heroChip: "XI · AL GHOZALI",
-      orgTitle: "Struktur Organisasi Kelas",
-      typing: ["pov: punya web kelas buat memories", "enam belas kepala, satu keluarga", "tempat semua cerita kelas disimpan"],
-      marquee: ["Kebersamaan","Kenangan","Persahabatan","Prestasi","Tawa","Perjuangan","Keluarga","Selamanya"],
-
-      leaders: [
-        {role:"Kepala Sekolah", name:"Nama Kepala Sekolah", detail:"Kepala sekolah", photo:""},
-        {role:"Wali Kelas", name:"Nama Wali Kelas", detail:"Wali kelas XI AL GHOZALI", photo:""}
-      ],
-
-      // 16 anggota kelas. role "Anggota" untuk yang bukan pengurus.
-      members: [
-        {name:"Nama Ketua Kelas",  role:"Ketua Kelas", photo:"", ig:""},
-        {name:"Nama Wakil Ketua",  role:"Wakil Ketua", photo:"", ig:""},
-        {name:"Nama Sekretaris",   role:"Sekretaris",  photo:"", ig:""},
-        {name:"Nama Bendahara",    role:"Bendahara",   photo:"", ig:""},
-        {name:"Nama Anggota 05", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 06", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 07", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 08", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 09", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 10", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 11", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 12", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 13", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 14", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 15", role:"Anggota", photo:"", ig:""},
-        {name:"Nama Anggota 16", role:"Anggota", photo:"", ig:""}
-      ],
-
-      // image = URL foto sertifikat/piala (opsional, kosongkan jika tidak ada)
-      achievements: [
-        {icon:"fa-trophy", year:"2026", title:"Prestasi / Kejuaraan", description:"Tuliskan nama lomba dan pencapaian kelas di sini.", image:""},
-        {icon:"fa-certificate", year:"2026", title:"Sertifikat Kegiatan", description:"Tambahkan sertifikat atau penghargaan yang pernah diperoleh.", image:""},
-        {icon:"fa-star", year:"2026", title:"Pencapaian Bersama", description:"Catat hal membanggakan yang berhasil diraih bersama.", image:""}
-      ],
-
-      // Galeri: cukup tempel URL foto. Ganti placeholder di bawah dengan link fotomu.
-      gallery: [
-        {image:"https://placehold.co/800x1000/1c221d/b9cc7c?text=Foto+01", caption:"Hari pertama bersama"},
-        {image:"https://placehold.co/800x600/1c221d/b9cc7c?text=Foto+02", caption:"Momen kebersamaan"},
-        {image:"https://placehold.co/800x800/1c221d/b9cc7c?text=Foto+03", caption:"Cerita di sekolah"},
-        {image:"https://placehold.co/800x1000/1c221d/b9cc7c?text=Foto+04", caption:"Kenangan yang berharga"},
-        {image:"https://placehold.co/800x700/1c221d/b9cc7c?text=Foto+05", caption:"Kegiatan kelas"},
-        {image:"https://placehold.co/800x900/1c221d/b9cc7c?text=Foto+06", caption:"Tawa bersama"},
-        {image:"https://placehold.co/800x600/1c221d/b9cc7c?text=Foto+07", caption:"Satu cerita"},
-        {image:"https://placehold.co/800x1000/1c221d/b9cc7c?text=Foto+08", caption:"Momen sederhana"},
-        {image:"https://placehold.co/800x800/1c221d/b9cc7c?text=Foto+09", caption:"Kebersamaan"},
-        {image:"https://placehold.co/800x1000/1c221d/b9cc7c?text=Foto+10", caption:"Hari yang menyenangkan"},
-        {image:"https://placehold.co/800x650/1c221d/b9cc7c?text=Foto+11", caption:"Teman seperjalanan"},
-        {image:"https://placehold.co/800x900/1c221d/b9cc7c?text=Foto+12", caption:"Sampai jumpa di cerita lain"}
-      ],
-
-      quotes: [
-        {text:"Kita mungkin datang dari cerita yang berbeda, tetapi di kelas ini kita belajar menulis satu cerita bersama.", by:"Untuk seluruh teman sekelas"},
-        {text:"Jangan takut berjalan pelan. Yang penting kita tetap belajar, bertumbuh, dan tidak saling meninggalkan.", by:"Pengingat kecil"},
-        {text:"Nilai bisa terlupakan, tetapi kebaikan dan kenangan bersama akan selalu punya tempat.", by:"Sebuah catatan"},
-        {text:"Suatu hari kita akan sibuk dengan jalan masing-masing. Semoga kita tetap ingat pernah berjuang di tempat yang sama.", by:"Untuk masa depan"}
-      ],
-
-      // Jadwal Sabtu - Kamis. Ubah "Mata Pelajaran" sesuai jadwal sekolah.
-      lessonHeaders: ["Hari","Kegiatan Pagi","Jam 1","Jam 2","Jam 3","Jam 4"],
-      lessonSchedule: [
-        {day:"Sabtu",  cells:["Apel Pagi","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran"]},
-        {day:"Minggu", cells:["Apel Pagi","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran"]},
-        {day:"Senin",  cells:["Apel Pagi","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran"]},
-        {day:"Selasa", cells:["Shalat Hajat & Dhuha Bersama","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran"]},
-        {day:"Rabu",   cells:["Shalat Hajat & Dhuha Bersama","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran"]},
-        {day:"Kamis",  cells:["—","Senam Pagi","Mata Pelajaran","Mata Pelajaran","Mata Pelajaran"]}
-      ],
-      cleanSchedule: [
-        {day:"Sabtu",  people:"Nama 1, Nama 2, Nama 3", task:"Menyapu, merapikan meja, papan tulis"},
-        {day:"Minggu", people:"Nama 4, Nama 5, Nama 6", task:"Menyapu dan membuang sampah"},
-        {day:"Senin",  people:"Nama 7, Nama 8, Nama 9", task:"Merapikan kelas dan papan tulis"},
-        {day:"Selasa", people:"Nama 10, Nama 11, Nama 12", task:"Menyapu dan merapikan meja"},
-        {day:"Rabu",   people:"Nama 13, Nama 14, Nama 15", task:"Mengepel dan cek kebersihan"},
-        {day:"Kamis",  people:"Nama 16, Nama 1, Nama 2", task:"Piket akhir pekan dan cek kebersihan"}
-      ],
-
-      agenda: [
-        {icon:"fa-flag", tag:"Sabtu · Minggu · Senin", title:"Apel Pagi", description:"Apel pagi bersama setiap hari Sabtu, Minggu, dan Senin. Datang tepat waktu dan berseragam rapi."},
-        {icon:"fa-person-praying", tag:"Selasa · Rabu", title:"Shalat Hajat & Dhuha Bersama", description:"Dilaksanakan bersama-sama setiap hari Selasa dan Rabu."},
-        {icon:"fa-person-running", tag:"Kamis · Jam ke-1", title:"Senam Pagi", description:"Senam pagi bersama pada jam pertama setiap hari Kamis."},
-        {icon:"fa-broom", tag:"Setiap hari", title:"Piket dan kebersihan kelas", description:"Dilaksanakan sesuai pembagian jadwal piket."},
-        {icon:"fa-clipboard-check", tag:"Setiap pekan", title:"Evaluasi dan koordinasi kelas", description:"Mengecek informasi, tugas, dan kebutuhan kelas bersama pengurus."},
-        {icon:"fa-calendar-plus", tag:"Isi tanggal", title:"Agenda khusus kelas", description:"Tambahkan rapat, lomba, kerja bakti, atau acara kelas lainnya."}
-      ],
-
-      closingText: "Terima kasih sudah menjadi bagian dari perjalanan ini. Semoga suatu hari nanti, saat kita melihat kembali halaman ini, kita tersenyum karena pernah tumbuh bersama.",
-      // Akun media sosial kelas (kosongkan yang tidak ada). Isi dengan link lengkap.
-      classSocial: {instagram:"", tiktok:"", youtube:"", whatsapp:""}
-    };
-    // ========================== AKHIR DATA WEBSITE ==========================
-
-    const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-    const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-    const FALLBACK='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480"><rect width="400" height="480" fill="#1b211c"/><g fill="none" stroke="#7a8c3c" stroke-width="3" opacity=".75"><rect x="150" y="170" width="100" height="76" rx="10"/><circle cx="200" cy="208" r="20"/><path d="M170 170l8-14h44l8 14"/></g><text x="200" y="296" fill="#939d8a" font-family="monospace" font-size="15" letter-spacing="3" text-anchor="middle">FOTO BELUM ADA</text></svg>');
-    window.FALLBACK=FALLBACK;
-    const img=(url,alt,cls="")=>`<img class="${cls}" src="${esc(url||FALLBACK)}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=window.FALLBACK">`;
-    const initials=n=>String(n||"?").trim().split(/\s+/).slice(0,2).map(w=>w[0]||"").join("").toUpperCase()||"?";
-    window.avFail=el=>{const s=document.createElement('span');s.className='ini';s.textContent=el.dataset.ini;el.replaceWith(s)};
-    const avatar=m=>`<div class="av">${m.photo?`<img src="${esc(m.photo)}" alt="${esc(m.name)}" data-ini="${esc(initials(m.name))}" loading="lazy" onerror="avFail(this)">`:`<span class="ini">${esc(initials(m.name))}</span>`}</div>`;
-    let io=null;
-    function reveal(els){if(io)els.forEach(e=>io.observe(e))}
-    let typing=false;
-    const OFFICER_ROLES=["ketua","wakil","sekretaris","bendahara"];
-    const isOfficer=m=>OFFICER_ROLES.some(r=>String(m.role).toLowerCase().includes(r));
-    const findRole=r=>DATA.members.find(m=>String(m.role).toLowerCase().includes(r));
-
-    // ---------- Isi konten ----------
-    document.title=`${DATA.className} — ${DATA.school}`;
-    $("#brandName").textContent=DATA.className;
-    $("#heroPill").textContent=`${DATA.school} · ${DATA.year}`;
-    $("#heroDesc").textContent=DATA.classDescription;
-    $("#heroImg").src=DATA.heroImage||FALLBACK; $("#heroImg").onerror=function(){this.onerror=null;this.src=FALLBACK};
-    $("#heroNote").textContent=DATA.heroNote; $("#heroChip").textContent=DATA.heroChip;
-    $("#heroSchool").textContent=`${DATA.school} · ${DATA.year}`;
-    $("#orgTitle").textContent=DATA.orgTitle;
-    $("#closingText").textContent=DATA.closingText;
-    $("#footerClass").textContent=DATA.className; $("#footerSchool").textContent=`${DATA.school} · Indonesia`;
-    $("#year").textContent=new Date().getFullYear();
-    $("#stMembers").dataset.count=DATA.members.length; $("#stAwards").dataset.count=DATA.achievements.length; $("#stPhotos").dataset.count=DATA.gallery.length;
-    $("#marquee").innerHTML=[0,1].map(()=>DATA.marquee.map(w=>`<span>${esc(w)}</span>`).join("")).join("");
-
-    $("#leaders").innerHTML=DATA.leaders.map((p,i)=>`<article class="card spot profile-card rv" style="--d:${i*.1}s">${img(p.photo,p.name)}<div><p class="role">${esc(p.role)}</p><h3>${esc(p.name)}</h3><p>${esc(p.detail)}</p></div></article>`).join("");
-    const officers=DATA.members.filter(isOfficer);
-    $("#officers").innerHTML=officers.map((m,i)=>`<article class="card spot officer rv" style="--d:${i*.08}s">${avatar(m)}<h4>${esc(m.name)}</h4><p>${esc(m.role)}</p></article>`).join("");
-
-    const node=(label,name)=>`<div class="node"><small>${esc(label)}</small><strong>${esc(name)}</strong></div>`;
-    const nm=(r,d)=>(findRole(r)||{name:d}).name;
-    const wali=(DATA.leaders.find(p=>String(p.role).toLowerCase().includes("wali"))||{name:"Wali Kelas"}).name;
-    $("#tree").innerHTML=node("Pembina",wali)+'<div class="tline"></div>'+node("Ketua Kelas",nm("ketua","Ketua Kelas"))+'<div class="tline"></div><div class="trow">'+node("Wakil Ketua",nm("wakil","Wakil Ketua"))+node("Sekretaris",nm("sekretaris","Sekretaris"))+node("Bendahara",nm("bendahara","Bendahara"))+'</div>';
-
-    // Anggota + Instagram digabung dalam satu kartu
-    $("#members").innerHTML=DATA.members.map((m,i)=>{
-      const u=String(m.ig||"").replace(/^@/,"").trim();
-      const link=u?`<a class="ig" href="https://instagram.com/${encodeURIComponent(u)}" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i>@${esc(u)}</a>`:`<span class="ig off"><i class="fa-brands fa-instagram"></i>belum diisi</span>`;
-      return `<article class="card spot member rv" style="--d:${(i%4)*.07}s" data-s="${esc((m.name+" "+u).toLowerCase())}">${avatar(m)}<h4>${esc(m.name)}</h4><p class="mrole ${isOfficer(m)?"key":""}">${esc(m.role||"Anggota")}</p>${link}</article>`;
-    }).join("");
-    $("#total").textContent=DATA.members.length; $("#shown").textContent=DATA.members.length;
-    $("#q").addEventListener("input",e=>{
-      const q=e.target.value.trim().toLowerCase();let n=0;
-      $$("#members .member").forEach(c=>{const ok=!q||c.dataset.s.includes(q);c.style.display=ok?"":"none";if(ok)n++});
-      $("#shown").textContent=n;$("#empty").style.display=n?"none":"block";
-    });
-
-    $("#achievements").innerHTML=DATA.achievements.map((a,i)=>`<article class="card spot ach rv" style="--d:${i*.1}s" ${a.image?`data-cert="${i}"`:""}>${a.image?`<div class="thumb">${img(a.image,a.title)}</div>`:""}<div class="top"><div class="ico"><i class="fa-solid ${esc(a.icon||"fa-star")}"></i></div>${a.year?`<span class="year">${esc(a.year)}</span>`:""}</div><h3>${esc(a.title)}</h3><p>${esc(a.description)}</p></article>`).join("");
-    $$("#achievements [data-cert]").forEach(c=>c.addEventListener("click",()=>{
-      const list=DATA.achievements.filter(a=>a.image).map(a=>({image:a.image,caption:a.title}));
-      openLB(list,list.findIndex(x=>x.caption===DATA.achievements[+c.dataset.cert].title));
-    }));
-
-    $("#quotes").innerHTML=DATA.quotes.map((q,i)=>`<article class="card spot quote rv" style="--d:${(i%2)*.1}s"><i class="fa-solid fa-quote-left"></i><p>${esc(q.text)}</p><small>— ${esc(q.by)}</small></article>`).join("");
-
-    // Jadwal
-    const DAYIDX={sabtu:6,minggu:0,senin:1,selasa:2,rabu:3,kamis:4,jumat:5};
-    const todayIdx=new Date().getDay();
-    const isAct=t=>/apel|senam|shalat|dhuha|hajat/i.test(t);
-    const cell=t=>t==="—"||!t?`<span class="dim">—</span>`:isAct(t)?`<span class="act">${esc(t)}</span>`:`<span class="dim">${esc(t)}</span>`;
-    const tag=d=>DAYIDX[String(d).toLowerCase()]===todayIdx?`<span class="today-tag">HARI INI</span>`:"";
-    const rowCls=d=>DAYIDX[String(d).toLowerCase()]===todayIdx?' class="today"':"";
-    $("#lessonHead").innerHTML="<tr>"+DATA.lessonHeaders.map(h=>`<th>${esc(h)}</th>`).join("")+"</tr>";
-    $("#lessonBody").innerHTML=DATA.lessonSchedule.map(r=>`<tr${rowCls(r.day)}><td>${esc(r.day)}${tag(r.day)}</td>${r.cells.map(c=>`<td>${cell(c)}</td>`).join("")}</tr>`).join("");
-    $("#cleanBody").innerHTML=DATA.cleanSchedule.map(r=>`<tr${rowCls(r.day)}><td>${esc(r.day)}${tag(r.day)}</td><td>${esc(r.people)}</td><td class="dim" style="position:static">${esc(r.task)}</td></tr>`).join("");
-
-    $("#agendaList").innerHTML=DATA.agenda.map((a,i)=>`<article class="card spot agenda rv" style="--d:${(i%2)*.1}s"><div class="a-ico"><i class="fa-solid ${esc(a.icon||"fa-calendar")}"></i></div><div><div class="a-tag">${esc(a.tag)}</div><h4>${esc(a.title)}</h4><p>${esc(a.description)}</p></div></article>`).join("");
-
-    const socialIcons={instagram:"fa-brands fa-instagram",tiktok:"fa-brands fa-tiktok",youtube:"fa-brands fa-youtube",whatsapp:"fa-brands fa-whatsapp"};
-    $("#classSocial").innerHTML=Object.entries(DATA.classSocial||{}).filter(([,u])=>u).map(([k,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener" aria-label="${esc(k)}"><i class="${socialIcons[k]||"fa-solid fa-link"}"></i></a>`).join("");
-
-    // ---------- Galeri (URL) + Muat lebih banyak ----------
-    const STEP=8;let gShown=0;
-    function renderGallery(){
-      const next=DATA.gallery.slice(gShown,gShown+STEP);
-      const html=next.map((g,k)=>{const i=gShown+k;return `<figure class="shot rv" style="--d:${(k%4)*.06}s" tabindex="0" role="button" aria-label="${esc(g.caption)}" data-i="${i}">${img(g.image,g.caption)}<div class="zoom"><i class="fa-solid fa-expand"></i></div><figcaption class="cap">${esc(g.caption)}</figcaption></figure>`}).join("");
-      const tmp=document.createElement("div");tmp.innerHTML=html;
-      const els=[...tmp.children];els.forEach(el=>{$("#gallery").appendChild(el);
-        el.addEventListener("click",()=>openLB(DATA.gallery,+el.dataset.i));
-        el.addEventListener("keydown",e=>{if(e.key==="Enter")openLB(DATA.gallery,+el.dataset.i)})});
-      gShown+=next.length;reveal(els);
-      if(gShown>=DATA.gallery.length)$("#moreBtn").parentElement.style.display="none";
-    }
-    $("#moreBtn").addEventListener("click",renderGallery);renderGallery();
-
-    // ---------- Lightbox ----------
-    const lb={el:$("#lb"),img:$("#lbImg"),cap:$("#lbCap"),n:$("#lbCount"),items:[],i:0};
-    function showLB(){const it=lb.items[lb.i];if(!it)return;lb.img.style.opacity=0;
-      setTimeout(()=>{lb.img.onerror=function(){this.onerror=null;this.src=FALLBACK};lb.img.src=it.image||FALLBACK;lb.img.alt=it.caption||"";lb.cap.textContent=it.caption||"";lb.n.textContent=`${lb.i+1} / ${lb.items.length}`;lb.img.style.opacity=1},120)}
-    function openLB(items,i){lb.items=items;lb.i=Math.max(0,i);showLB();lb.el.classList.add("open");document.body.classList.add("lock")}
-    function closeLB(){lb.el.classList.remove("open");if(window.__ready)document.body.classList.remove("lock")}
-    const step=d=>{lb.i=(lb.i+d+lb.items.length)%lb.items.length;showLB()};
-    $("#lbX").onclick=closeLB;$("#lbP").onclick=()=>step(-1);$("#lbN").onclick=()=>step(1);
-    lb.el.addEventListener("click",e=>{if(e.target===lb.el)closeLB()});
-    document.addEventListener("keydown",e=>{if(!lb.el.classList.contains("open"))return;if(e.key==="Escape")closeLB();if(e.key==="ArrowLeft")step(-1);if(e.key==="ArrowRight")step(1)});
-    let tx=0;lb.el.addEventListener("touchstart",e=>tx=e.changedTouches[0].clientX,{passive:true});
-    lb.el.addEventListener("touchend",e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)step(d>0?-1:1)},{passive:true});
-
-    // ---------- Reveal saat scroll (mulai setelah loading selesai) ----------
-    function startSite(){
-      io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");
-        io.unobserve(e.target)}}),{threshold:.08,rootMargin:"0px 0px -6% 0px"});
-      $$(".rv").forEach(e=>io.observe(e));
-      setTimeout(()=>$("#heroTitle").classList.add("in"),120);
-      // hitung naik angka statistik
-      $$("[data-count]").forEach(el=>{const to=+el.dataset.count,t0=performance.now(),dur=1400;
-        (function f(n){const k=Math.min(1,(n-t0)/dur);el.textContent=String(Math.round(to*(1-Math.pow(1-k,3)))).padStart(2,"0");if(k<1)requestAnimationFrame(f)})(t0)});
-      typeLoop();
-    }
-    if(window.__ready)startSite();else window.addEventListener("siteready",startSite,{once:true});
-
-    // ---------- Efek ketik ----------
-    function typeLoop(){
-      if(typing)return;typing=true;const el=$("#typed");let w=0,c=0,del=false;
-      (function f(){const s=DATA.typing[w]||"";
-        if(!del){c++;el.innerHTML=esc(s.slice(0,c));if(c>=s.length){del=true;return setTimeout(f,1800)}}
-        else{c--;el.innerHTML=esc(s.slice(0,c));if(c<=0){del=false;w=(w+1)%DATA.typing.length}}
-        setTimeout(f,del?24:48)})();
-    }
-
-    // ---------- Nav, progress, back-to-top ----------
-    $("#burger").addEventListener("click",()=>{const o=$("#links").classList.toggle("open");$("#burger").classList.toggle("open",o);$("#burger").setAttribute("aria-expanded",o);document.body.classList.toggle("lock",o)});
-    $$("#links a").forEach(a=>a.addEventListener("click",()=>{$("#links").classList.remove("open");$("#burger").classList.remove("open");document.body.classList.remove("lock")}));
-    addEventListener("scroll",()=>{const h=document.documentElement,max=h.scrollHeight-h.clientHeight;
-      $("#progress").style.width=(max>0?scrollY/max*100:0)+"%";$("#backTop").classList.toggle("show",scrollY>700)},{passive:true});
-    $("#backTop").addEventListener("click",()=>scrollTo({top:0,behavior:"smooth"}));
-    const secs=["home","profil","anggota","prestasi","galeri","jadwal","agenda"];
-    const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$("#links a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});
-    secs.forEach(id=>{const s=document.getElementById(id);if(s)so.observe(s)});
-
-    // ---------- Spotlight kartu, glow kursor, tilt ----------
-    const fine=matchMedia("(pointer:fine)").matches;
-    document.addEventListener("pointermove",e=>{
-      const c=e.target.closest&&e.target.closest(".spot");
-      if(c){const r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px")}
-      if(fine){const g=$("#glow");g.style.opacity=1;g.style.transform=`translate(${e.clientX}px,${e.clientY}px)`}
-    },{passive:true});
-    const tilt=$("#tilt");
-    if(fine&&tilt){const w=tilt.parentElement;
-      w.addEventListener("pointermove",e=>{const r=w.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tilt.style.transform=`rotateY(${x*12}deg) rotateX(${-y*12}deg)`});
-      w.addEventListener("pointerleave",()=>tilt.style.transform="")}
-
-    // ---------- Partikel latar hero ----------
-    (function(){
-      const c=$("#fx");if(!c||matchMedia("(prefers-reduced-motion:reduce)").matches)return;
-      const x=c.getContext("2d"),dpr=Math.min(devicePixelRatio||1,2);let w,h,pts=[],run=false,mx=-999,my=-999;
-      function size(){const r=c.getBoundingClientRect();w=r.width;h=r.height;c.width=w*dpr;c.height=h*dpr;x.setTransform(dpr,0,0,dpr,0,0);
-        const n=Math.round(Math.min(70,w*h/17000));pts=Array.from({length:n},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35}))}
-      function frame(){if(!run)return;x.clearRect(0,0,w,h);
-        for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;
-          x.beginPath();x.arc(p.x,p.y,1.6,0,6.283);x.fillStyle="rgba(185,204,124,.7)";x.fill()}
-        for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
-          if(d<120){x.strokeStyle=`rgba(122,140,60,${(1-d/120)*.35})`;x.lineWidth=1;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}
-          const d=Math.hypot(pts[i].x-mx,pts[i].y-my);if(d<150){x.strokeStyle=`rgba(212,227,162,${(1-d/150)*.5})`;x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(mx,my);x.stroke()}}
-        requestAnimationFrame(frame)}
-      size();addEventListener("resize",size);
-      c.parentElement.addEventListener("pointermove",e=>{const r=c.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top});
-      c.parentElement.addEventListener("pointerleave",()=>{mx=my=-999});
-      new IntersectionObserver(es=>{const v=es[0].isIntersecting;if(v&&!run){run=true;frame()}else if(!v)run=false}).observe(c.parentElement);
-    })();
-  </script>
+<script>
+(function(){var d=document,L=d.getElementById('ld'),loaded=d.readyState==='complete',p=0,done=false,t0=performance.now(),ms=['Menyiapkan kelas…','Memanggil anggota…','Memuat kenangan…','Siap berangkat'],c=1,iv=setInterval(function(){c++;var e=d.getElementById('lcn');if(e)e.textContent='IMG_'+String(c).padStart(4,'0')},420);
+addEventListener('load',function(){loaded=true});
+function fin(){if(done)return;done=true;clearInterval(iv);L.style.setProperty('--p','100%');d.getElementById('lnn').textContent='100%';setTimeout(function(){L.classList.add('done');d.body.classList.remove('lock');window.__r=1;dispatchEvent(new Event('siteready'));setTimeout(function(){L.remove()},1300)},300)}
+function tk(n){if(done)return;p+=((loaded?100:88)-p)*.045;L.style.setProperty('--p',p.toFixed(1)+'%');d.getElementById('lnn').textContent=Math.round(p)+'%';d.getElementById('ls').textContent=ms[Math.min(3,Math.floor(p/26))];if(p>=99.3&&n-t0>3000){fin();return}requestAnimationFrame(tk)}
+requestAnimationFrame(tk);setTimeout(fin,7000)})();
+</script>
+<script>
+/* ===== DATA KELAS: ganti isi di sini ===== */
+const DATA={className:"XI AL GHOZALI",school:"Yayasan Tarbiyatul Wathon",year:"2026 / 2027",
+quote:"Di sekolah kita belajar lebih dari pelajaran — kita belajar tentang hidup.",
+address:"Yayasan Tarbiyatul Wathon, Gresik, Jawa Timur",
+creator:{name:"Brian Official",role:"Siswa XI AL GHOZALI",ig:"",extra:""},
+desc:"Bukan sekadar ruang belajar, tetapi tempat banyak cerita dimulai, persahabatan tumbuh, dan kenangan tercipta.",
+heroVideo:"",heroImage:"https://n.uguu.se/WRKTLddXgCdn.jpg",heroImage2:"https://n.uguu.se/DbNUZymtcAnh.jpg",heroImage3:"https://n.uguu.se/SmPwWsssOBMv.jpg",heroNote:"Kelas kita, cerita kita",
+city:"Gresik",lat:-7.16,lon:112.65,
+music:[{title:"Lady Killers II x A’int in LA",artist:"G-Eazy & Adela",url:"https://n.uguu.se/nYnFrtzOfQAQ.mp3",cover:""}],
+typing:["pov: punya web kelas buat memories","enam belas kepala, satu keluarga","tempat semua cerita kelas disimpan"],
+marquee:["Kebersamaan","Kenangan","Persahabatan","Prestasi","Tawa","Perjuangan","Keluarga","Selamanya"],
+/* Sosial media: isi url akun. */
+social:{
+ig:{handle:"@society_xiips",url:"https://instagram.com/society_xiips",desc:"Foto dan cerita harian kelas"},
+tt:{handle:"@username",url:"",desc:"Video seru dan momen lucu kelas"},
+sp:{handle:"Playlist kelas",url:"",desc:"Lagu-lagu yang menemani kelas"}},
+leaders:{kepsek:{name:"Anna Lutfa",photo:""},wali:{name:"Muhammad Faiq Muizzudin",photo:""}},
+/* anggota: [nama, jabatan (untuk bagan struktur saja), username ig, nama di bagan]. Foto: tambah photo nanti. */
+members:[["Adhatus Salvia El Ma’ruf","Bendahara"],["Ahmad Brian Rifqi Al’fuad","Anggota","lauampash"],["Ahmad Iklyl Hibatulloh"],["Almirah Arisanti Cahyaningrum"],["Excel Putra Aninditya"],["Iyazi Laili Safitri"],["Kalisha Salsabila"],["Mohammad Nailul Rohman","Ketua Kelas","","Moh. Nailul Rohman"],["Mohammad Reza Akbar"],["Muhammad Haikal Fikry"],["Nur Sabrina Aqilah"],["Qo’imatin Ni’mah","Sekretaris"],["Saskia Erisyah Martha"],["Sultan Syarif Alim"],["Vaqihatul Khasanah"],["Wildah Izuka"]].map(([name,role,ig,org])=>({name,role:role||"Anggota",photo:"",ig:ig||"",org:org||""})),
+achievements:[{icon:"🏆",year:"2026",title:"Prestasi / Kejuaraan",description:"Pernah memenangkan Lomba Menghias Taman Juara 2.",image:"https://d.uguu.se/bBCZNuKNmAmC.jpg"},{icon:"📜",year:"2026",title:"Sertifikat Penghargaan",description:"Mendapatkan sertifikat atas kemenangan Lomba Menghias Taman.",image:"https://d.uguu.se/dBjYjRRjjSvN.jpg"},{icon:"⭐",year:"2026",title:"Pencapaian Bersama",description:"Memenangkan sejumlah lomba Semarak Agustus yang penuh tawa dan gembira bersama.",image:"https://n.uguu.se/OQXzDuZzRfeb.jpg"}],
+/* galeri potret (image = URL foto) */
+gallery:[{image:"https://d.uguu.se/yzFPkWyobVGb.jpg",caption:"Hari pertama bersama"},{image:"https://n.uguu.se/DbNUZymtcAnh.jpg",caption:"Momen kebersamaan"},{image:"https://n.uguu.se/SmPwWsssOBMv.jpg",caption:"Cerita di sekolah"},{image:"https://d.uguu.se/bBCZNuKNmAmC.jpg",caption:"Kenangan yang berharga"},{image:"https://d.uguu.se/dBjYjRRjjSvN.jpg",caption:"Kegiatan kelas"},{image:"https://n.uguu.se/OQXzDuZzRfeb.jpg",caption:"Tawa bersama"},{image:"https://d.uguu.se/ULSHGPBypvEN.jpg",caption:"Satu cerita"},{image:"https://n.uguu.se/puMdFyRTsoLk.jpg",caption:"Momen sederhana"},{image:"https://d.uguu.se/mBsKvkZvCyop.jpg",caption:"Kebersamaan"},{image:"https://n.uguu.se/BfhkqlpihJqY.jpg",caption:"Hari yang menyenangkan"},{image:"https://d.uguu.se/SOaFhyvSEPoq.jpg",caption:"Teman seperjalanan"},{image:"https://n.uguu.se/CBjehSKLtUUf.jpg",caption:"Sampai jumpa di cerita lain"},{image:"https://d.uguu.se/HDdDxRwiorDx.jpg",caption:"Hari-hari seru"},{image:"https://n.uguu.se/oxCJtlyGrDKs.jpg",caption:"Cerita kita"}],
+/* galeri landscape: tampil 2 kotak lebar per halaman */
+landscape:[{image:"https://d.uguu.se/crSlrlpFpMkh.jpg",caption:"Foto bersama satu kelas"},{image:"https://d.uguu.se/YxuFobcKbRsD.jpg",caption:"Kegiatan sekolah"},{image:"https://n.uguu.se/uxajNkyRHZMj.jpg",caption:"Momen outdoor"},{image:"https://n.uguu.se/HKHFkGsbAymX.jpg",caption:"Kenangan bersama"}],
+/* jadwal: pagi, a = sebelum istirahat, b = sesudah istirahat */
+lessons:[
+{day:"Sabtu",pagi:"Doa Bersama / Apel Pagi",a:["Sosiologi","Sosiologi","Informatika","Informatika"],b:["Bhs. Indonesia","Bhs. Indonesia","Bhs. Arab","Bhs. Arab"]},
+{day:"Minggu",pagi:"Doa Bersama / Apel Pagi",a:["Sosiologi","Sosiologi","Ekonomi","Ekonomi"],b:["Qurdits","Qurdits","Ushul Fiqih","Ke-NU-an"]},
+{day:"Senin",pagi:"Doa Bersama / Apel Pagi",a:["Bhs. Indonesia","Bhs. Indonesia","Matematika","Matematika"],b:["PKWU","PKWU","SKI","SKI"]},
+{day:"Selasa",pagi:"Shalat Hajat & Dhuha Bersama",a:["Penjaskes","Penjaskes","Seni Rupa","Seni Rupa"],b:["Matematika","Matematika","Bhs. Inggris","Bhs. Inggris"]},
+{day:"Rabu",pagi:"Doa Bersama / Apel Pagi",a:["Ekonomi","Ekonomi","Geografi","Geografi"],b:["Pend. Pancasila","Pend. Pancasila","Fiqih","Fiqih"]},
+{day:"Kamis",pagi:"Apel Pagi + Pagi Sehat",a:["Geografi","Aqidah Akhlak","Aqidah Akhlak","—"],b:["Bhs. Inggris","Geografi","Sejarah","Sejarah"]}],
+clean:[{day:"Sabtu",people:"Nama 1, Nama 2, Nama 3",task:"Menyapu, merapikan meja, papan tulis"},{day:"Minggu",people:"Nama 4, Nama 5, Nama 6",task:"Menyapu dan membuang sampah"},{day:"Senin",people:"Nama 7, Nama 8, Nama 9",task:"Merapikan kelas dan papan tulis"},{day:"Selasa",people:"Nama 10, Nama 11, Nama 12",task:"Menyapu dan merapikan meja"},{day:"Rabu",people:"Nama 13, Nama 14, Nama 15",task:"Mengepel dan cek kebersihan"},{day:"Kamis",people:"Nama 16, Nama 1, Nama 2",task:"Piket akhir pekan dan cek kebersihan"}],
+agenda:[{icon:"🚩",tag:"Sabtu · Minggu · Senin · Rabu · Kamis",title:"Doa Bersama / Apel Pagi",description:"Apel pagi bersama. Datang tepat waktu dan berseragam rapi."},{icon:"🤲",tag:"Selasa",title:"Shalat Hajat & Dhuha Bersama",description:"Dilaksanakan bersama setiap hari Selasa."},{icon:"🏃",tag:"Kamis",title:"Pagi Sehat",description:"Senam pagi bersama setiap hari Kamis."}]};
+/* ===== AKHIR DATA ===== */
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],D=DATA,root=document.documentElement;
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pc=()=>{const c=getComputedStyle(root);return[c.getPropertyValue("--a1").trim()||"#56692f",c.getPropertyValue("--a3").trim()||"#2c381a"]};
+const ph=(l,h)=>{const [c1,c2]=pc();return "data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 ${h||500}"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="400" height="${h||500}" fill="url(#g)"/><text x="200" y="${(h||500)/2}" fill="#fff" fill-opacity=".8" font-family="sans-serif" font-size="18" font-weight="700" text-anchor="middle">${l}</text></svg>`)};
+function refreshPh(){$$("img[data-pl]").forEach(i=>{if(i.src.startsWith("data:image/svg+xml"))i.src=ph(i.dataset.pl,+i.dataset.h)})}
+const im=(u,l,h)=>`<img src="${esc(u||ph(l,h))}" data-pl="${esc(l)}" data-h="${h||500}" alt="${esc(l)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=ph(this.dataset.pl,+this.dataset.h)">`;
+const ini=n=>String(n||"?").trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+const av=m=>`<div class="av">${m.photo?`<img src="${esc(m.photo)}" alt="${esc(m.name)}" loading="lazy" onerror="this.outerHTML='<span>${esc(ini(m.name))}</span>'">`:`<span>${esc(ini(m.name))}</span>`}</div>`;
+document.documentElement.classList.add("js");
+/* tema & palet */
+const cur=()=>root.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+const syncT=()=>{const t=cur();$("#tc").content=t==="dark"?"#0b1511":"#e9f8e4";$(".moon").style.display=t==="dark"?"none":"block";$(".sun").style.display=t==="dark"?"block":"none"};
+$("#theme").onclick=()=>{const n=cur()==="dark"?"light":"dark";root.dataset.theme=n;try{localStorage.setItem("theme",n)}catch(e){}syncT()};syncT();
+const setP=p=>{root.dataset.p=p;try{localStorage.setItem("pal",p)}catch(e){}$$("#palp button").forEach(b=>b.classList.toggle("s",b.dataset.p===p));refreshPh()};
+$$("#palp button").forEach(b=>b.onclick=()=>{setP(b.dataset.p);$("#palp").classList.remove("o")});setP(root.dataset.p||"green");
+$("#pal").onclick=e=>{e.stopPropagation();$("#palp").classList.toggle("o")};addEventListener("click",e=>{if(!e.target.closest("#palp"))$("#palp").classList.remove("o")});
+/* isi */
+document.title=D.className+" — "+D.school;$("#brand").textContent=D.className;$("#pill").textContent=D.school+" · "+D.year;$("#desc").textContent=D.desc;
+$("#mainBox").innerHTML=D.heroVideo?`<video src="${esc(D.heroVideo)}" poster="${esc(D.heroImage||ph("XI AL GHOZALI"))}" autoplay muted loop playsinline preload="auto"></video>`:im(D.heroImage,"XI AL GHOZALI");
+$("#mi1").src=D.heroImage2||ph("Kenangan",400);$("#mi2").src=D.heroImage3||ph("Bersama",400);$("#hn").textContent=D.heroNote;$("#hs").textContent=D.school+" · "+D.year;
+$("#mq").innerHTML=[0,1].map(()=>D.marquee.map(w=>`<span>${esc(w)}</span>`).join("")).join("");
+$$("#ld .po img").forEach((e,i)=>e.src=(D.gallery[i]&&D.gallery[i].image)||ph("Foto "+(i+1),400));
+$("#bgf").innerHTML=[["12%","6%","150px","-6deg",.6],["80%","12%","130px","7deg",.9],["3%","58%","120px","5deg",1.2],["86%","62%","160px","-5deg",.5],["46%","84%","110px","4deg",1]].map((f,i)=>`<div class="bf" data-k="${f[4]}" style="--x:${f[0]};--y:${f[1]};--w:${f[2]};--r:${f[3]};--t:${8+i}s"><i>${im(D.gallery[i]&&D.gallery[i].image,"Foto "+(i+1),500)}</i></div>`).join("");
+/* jam, tanggal, cuaca */
+const WX={0:["☀️","Cerah"],1:["🌤️","Cerah berawan"],2:["⛅","Berawan"],3:["☁️","Mendung"],45:["🌫️","Berkabut"],48:["🌫️","Berkabut"],51:["🌦️","Gerimis"],53:["🌦️","Gerimis"],55:["🌦️","Gerimis"],61:["🌧️","Hujan ringan"],63:["🌧️","Hujan"],65:["🌧️","Hujan lebat"],80:["🌦️","Hujan lokal"],81:["🌧️","Hujan"],82:["⛈️","Hujan deras"],95:["⛈️","Badai petir"],96:["⛈️","Badai petir"],99:["⛈️","Badai petir"]};
+function tick(){const n=new Date(),h=n.getHours();$("#clock").textContent=n.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit"}).replace(/\./g,":");
+$("#dateTxt").textContent=n.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});$("#greet").textContent=h<11?"Selamat pagi":h<15?"Selamat siang":h<18?"Selamat sore":"Selamat malam"}
+tick();setInterval(tick,1000);
+const WL={la:D.lat,lo:D.lon,n:D.city};
+async function wx(){try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${WL.la}&longitude=${WL.lo}&current=temperature_2m,weather_code,relative_humidity_2m&timezone=auto`);if(!r.ok)throw 0;const j=(await r.json()).current,w=WX[j.weather_code]||["🌡️","Cuaca"];
+$("#wxE").textContent=w[0];$("#wxT").textContent=Math.round(j.temperature_2m)+"°C";$("#wxD").textContent=w[1];$("#wxC").textContent=WL.n+" · lembap "+j.relative_humidity_2m+"% · ketuk = lokasiku"}catch(e){$("#wxD").textContent="Cuaca belum tersedia";$("#wxC").textContent="Perlu hosting sendiri & internet"}}
+$("#wxCard").onclick=()=>{if(!navigator.geolocation)return;$("#wxD").textContent="Mencari lokasi…";navigator.geolocation.getCurrentPosition(p=>{WL.la=p.coords.latitude;WL.lo=p.coords.longitude;WL.n="Lokasimu";wx()},()=>{$("#wxD").textContent="Izin lokasi ditolak"},{timeout:8000})};
+wx();setInterval(wx,600000);
+/* baterai & jaringan */
+function bat(b){const l=Math.round(b.level*100);$("#batT").textContent=l+"%";$("#batI").innerHTML=`<span class="bt ${l<=20&&!b.charging?"low":""}" style="--w:${l}%"><i></i></span>`;$("#batS").textContent=b.charging?"⚡ Sedang mengisi":"Sisa baterai"}
+if(navigator.getBattery)navigator.getBattery().then(b=>{bat(b);b.onlevelchange=b.onchargingchange=()=>bat(b)}).catch(()=>{$("#batS").textContent="Tidak tersedia"});else{$("#batT").textContent="—";$("#batS").textContent="Browser tidak mendukung"}
+const IC={wifi:'<svg viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10.5 10.5 0 0 1 14 0M8.5 16a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1"/></svg>',cell:'<svg viewBox="0 0 24 24"><path d="M4 20v-3M9 20v-7M14 20V9M19 20V4"/></svg>',off:'<svg viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10.5 10.5 0 0 1 14 0M8.5 16a5.5 5.5 0 0 1 7 0M3 3l18 18"/></svg>',web:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>'};
+function net(){const c=navigator.connection||navigator.mozConnection||{},et=c.effectiveType?c.effectiveType.toUpperCase():"";let k,t,t2;
+if(!navigator.onLine){k="off";t="Offline";t2="Tidak ada koneksi"}else if(c.type==="wifi"){k="wifi";t="Wi-Fi";t2="Terhubung"+(et?" · "+et:"")}else if(c.type==="cellular"){k="cell";t="Data seluler";t2=et||"Terhubung"}else{k="web";t="Online";t2=et?"Jaringan "+et+" (tipe tidak terdeteksi)":"Terhubung"}
+$("#netI").innerHTML=IC[k];$("#netT").textContent=t;$("#netS").textContent=t2}
+net();addEventListener("online",net);addEventListener("offline",net);if(navigator.connection)navigator.connection.addEventListener("change",net);
+/* musik */
+const au=new Audio();au.preload="none";let ti=0;
+function loadT(){const t=D.music[ti]||{};$("#mpT").textContent=t.title||"Belum ada lagu";$("#mpA").textContent=t.url?t.artist:"Isi URL lagu di DATA.music";$("#mpC").style.backgroundImage=t.cover?`url("${t.cover}")`:"";$("#mpC").textContent=t.cover?"":"♪";au.src=t.url||""}
+const setPl=p=>{$("#mp").classList.toggle("pl",p);$("#mpPl").textContent=p?"⏸":"▶"};
+$("#mpPl").onclick=()=>{if(!au.src||!D.music[ti].url){$("#mpA").textContent="Belum ada URL lagu — isi di DATA.music";return}au.paused?au.play().then(()=>setPl(true)).catch(()=>$("#mpA").textContent="Lagu tidak bisa dimuat"):(au.pause(),setPl(false))};
+const go=x=>{ti=(ti+x+D.music.length)%D.music.length;const was=!au.paused;loadT();if(was&&D.music[ti].url)au.play().catch(()=>{})};
+$("#mpPr").onclick=()=>go(-1);$("#mpN").onclick=()=>go(1);au.onended=()=>go(1);au.ontimeupdate=()=>{$("#mpI").style.width=(au.duration?au.currentTime/au.duration*100:0)+"%"};
+$("#mpP").onclick=e=>{if(au.duration){const r=e.currentTarget.getBoundingClientRect();au.currentTime=(e.clientX-r.left)/r.width*au.duration}};loadT();
+/* sosial & prestasi (carousel) */
+const SI={ig:["📸","s-ig"],tt:["🎵","s-tt"],sp:["🎧","s-sp"],yt:["▶️","s-yt"],wa:["💬","s-wa"]};
+const LG={ig:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="#fff" stroke="none"/></svg>',tt:'<svg viewBox="0 0 24 24" fill="#fff"><path d="M16.6 3h-3.2v11.6a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V8.8a5.8 5.8 0 1 0 5 5.8V9.1a7 7 0 0 0 4 1.3V7.2A4.2 4.2 0 0 1 16.6 3z"/></svg>',sp:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round"><path d="M5 9.2c4.6-1.3 9.6-1 14 1.4" stroke-width="2.4"/><path d="M6 13c3.9-1 7.7-.7 11.2 1.2" stroke-width="2.1"/><path d="M7 16.6c3-.7 5.8-.5 8.3.9" stroke-width="1.8"/></svg>'};
+const SM={ig:{n:"Instagram",b:"linear-gradient(135deg,#f58529,#dd2a7b 55%,#8134af)"},tt:{n:"TikTok",b:"linear-gradient(135deg,#0d0d0d,#2b2b2b)"},sp:{n:"Spotify",b:"#1db954"}};
+$("#sc").innerHTML=Object.keys(SM).map((k,i)=>{const x=D.social[k],tg=x.url?"a":"div";return `<${tg} class="card scd rv" data-t ${x.url?`href="${esc(x.url)}" target="_blank" rel="noopener"`:""} style="--b:${SM[k].b};--d:${i*.1}s"><i class="gw"></i><div class="lgo">${LG[k]}</div><div><h3>${SM[k].n}</h3><p>${esc(x.desc)}</p></div><span class="btn ${x.url?"b1":"b2"} go">${esc(x.handle)}${x.url?" ↗":""}</span></${tg}>`}).join("");
+$("#ach").innerHTML=D.achievements.map((a,i)=>`<article class="card ac" data-t ${a.image?`data-i="${i}"`:""}>${a.image?`<div class="th">${im(a.image,a.title)}</div>`:""}<div class="at"><div class="ic">${a.icon}</div>${a.year?`<span class="yr">${esc(a.year)}</span>`:""}</div><h3>${esc(a.title)}</h3><p>${esc(a.description)}</p></article>`).join("");
+$$("#ach [data-i]").forEach(c=>c.onclick=()=>{const l=D.achievements.filter(a=>a.image).map(a=>({image:a.image,caption:a.title}));openLB(l,l.findIndex(x=>x.caption===D.achievements[+c.dataset.i].title))});
+$$("[data-car]").forEach(b=>b.onclick=()=>{const c=$("#"+b.dataset.car);c.scrollBy({left:+b.dataset.d*Math.min(380,c.clientWidth*.8),behavior:"smooth"})});
+$$(".car").forEach(c=>{let dn=false,sx=0,sl=0;c.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;dn=true;sx=e.clientX;sl=c.scrollLeft;c.style.scrollSnapType="none"});addEventListener("pointermove",e=>{if(dn)c.scrollLeft=sl-(e.clientX-sx)});addEventListener("pointerup",()=>{if(dn){dn=false;c.style.scrollSnapType=""}})});
+/* struktur */
+const by=r=>D.members.filter(m=>m.role.toLowerCase().includes(r)),nd=(m,l)=>`<div class="nd">${av(m)}<small>${esc(l)}</small><strong class="nm"><span>${esc(m.org||m.name)}</span></strong></div>`,vl='<div class="vl"></div>';
+const L=D.leaders;$("#org").innerHTML=`<div class="lv">${nd(L.kepsek,"Kepala Sekolah")}</div>${vl}<div class="lv">${nd(L.wali,"Wali Kelas")}</div>${vl}<div class="lv">${by("ketua").filter(m=>!m.role.toLowerCase().includes("wakil")).map(m=>nd(m,"Ketua Kelas")).join("")}${by("wakil").map(m=>nd(m,"Wakil Ketua")).join("")}</div>${vl}<div class="lv">${by("sekretaris").map(m=>nd(m,"Sekretaris")).join("")}${by("bendahara").map(m=>nd(m,"Bendahara")).join("")}</div>`;
+/* anggota (halaman) */
+const OFR=["ketua","wakil","sekretaris","bendahara"],isO=m=>OFR.some(r=>m.role.toLowerCase().includes(r));
+function pager(listEl,pgEl,get,per,render,after){let p=1;function draw(anim){const items=get(),pages=Math.max(1,Math.ceil(items.length/per));p=Math.min(p,pages);
+const put=()=>{listEl.innerHTML=items.slice((p-1)*per,p*per).map((x,i)=>render(x,i,(p-1)*per+i)).join("");listEl.classList.remove("sw");after&&after(items)};
+if(anim){listEl.classList.add("sw");setTimeout(put,200)}else put();
+let h=`<button ${p<2?"disabled":""} data-g="${p-1}">Prev</button>`;for(let i=1;i<=pages;i++)h+=`<button class="${i===p?"s":""}" data-g="${i}">${i}</button>`;h+=`<button ${p>=pages?"disabled":""} data-g="${p+1}">Next</button>`;pgEl.innerHTML=pages>1?h:"";
+$$("button",pgEl).forEach(b=>b.onclick=()=>{p=+b.dataset.g;draw(true);if(listEl.id!=="gal2"){const s=listEl.closest("section");scrollTo({top:s.offsetTop-10,behavior:"smooth"})}})}
+draw(false);return{reset:()=>{p=1;draw(false)}}}
+function mqx(r){$$(".nm",r||document).forEach(n=>{const sp=n.firstElementChild;if(!sp)return;sp.classList.remove("mv");const o=sp.scrollWidth-n.clientWidth;if(o>2){sp.style.setProperty("--sc",-(o+6)+"px");sp.style.animationDuration=(3+o/26)+"s";sp.classList.add("mv")}})}
+const nrm=t=>String(t).toLowerCase().replace(/[’']/g,"");
+const mem=pager($("#members"),$("#pnM"),()=>{const q=nrm($("#q").value.trim());return D.members.filter(m=>!q||nrm(m.name+" "+(m.ig||"")).includes(q))},8,(m,i)=>{const u=String(m.ig||"").replace(/^@/,"").trim();
+return `<article class="card mb" data-t style="--i:${i}">${av(m)}<h4 class="nm"><span>${esc(m.name)}</span></h4>${u?`<a class="ig" href="https://instagram.com/${encodeURIComponent(u)}" target="_blank" rel="noopener" style="margin-top:12px">@${esc(u)}</a>`:`<span class="ig off" style="margin-top:12px">Instagram belum diisi</span>`}</article>`},items=>{$("#shn").textContent=items.length;$("#em2").style.display=items.length?"none":"block";setTimeout(()=>mqx($("#members")),60)});
+$("#tot").textContent=D.members.length;$("#q").oninput=()=>mem.reset();
+const bindG=(sel,list)=>$$(sel+" .sht").forEach(f=>{f.onclick=()=>openLB(list,+f.dataset.ix);f.onkeydown=e=>{if(e.key==="Enter")openLB(list,+f.dataset.ix)}});
+const gt=(c,h)=>(g,i,ix)=>`<figure class="sht ${c}" style="--i:${i}" tabindex="0" role="button" aria-label="${esc(g.caption)}" data-ix="${ix}">${im(g.image,g.caption,h)}<figcaption>${esc(g.caption)}</figcaption></figure>`;
+pager($("#gal"),$("#pnG"),()=>D.gallery,8,gt("",520),()=>bindG("#gal",D.gallery));
+pager($("#gal2"),$("#pnL"),()=>D.landscape,2,gt("ls",225),()=>bindG("#gal2",D.landscape));
+(document.fonts&&document.fonts.ready||Promise.resolve()).then(()=>mqx());addEventListener("resize",()=>mqx());
+/* jadwal */
+const DI={sabtu:6,minggu:0,senin:1,selasa:2,rabu:3,kamis:4,jumat:5},td=new Date().getDay(),isT=x=>DI[x.toLowerCase()]===td,tg=x=>isT(x)?'<span class="tag">Hari ini</span>':"";
+const cell=t=>!t||t==="—"?'<span class="dm">—</span>':/apel|senam|shalat|dhuha|hajat|sehat|doa/i.test(t)?`<span class="act">${esc(t)}</span>`:`<span style="font-weight:600">${esc(t)}</span>`;
+const mg2=a=>{let h="",i=0;while(i<a.length){let j=i;while(j+1<a.length&&a[j+1]===a[i]&&a[i]!=="—")j++;h+=`<td colspan="${j-i+1}">${cell(a[i])}</td>`;i=j+1}return h};
+$("#lh").innerHTML='<tr><th>Hari</th><th>Kegiatan pagi</th><th colspan="4" style="text-align:center">Sebelum istirahat</th><th>Istirahat</th><th colspan="4" style="text-align:center">Sesudah istirahat</th><th>Penutup</th></tr>';
+$("#lbd").innerHTML=D.lessons.map(r=>`<tr class="${isT(r.day)?"today":""}"><td>${esc(r.day)}${tg(r.day)}</td><td>${cell(r.pagi)}</td>${mg2(r.a)}<td><span class="brk">Istirahat</span></td>${mg2(r.b)}<td><span class="dm">Dzuhur berjamaah</span></td></tr>`).join("");
+$("#cb").innerHTML=D.clean.map(r=>`<tr class="${isT(r.day)?"today":""}"><td>${esc(r.day)}${tg(r.day)}</td><td>${esc(r.people)}</td><td class="dm">${esc(r.task)}</td></tr>`).join("");
+$("#agl").innerHTML=D.agenda.map((a,i)=>`<article class="card ae rv" data-t style="--d:${(i%2)*.1}s"><div class="ai">${a.icon}</div><div><small>${esc(a.tag)}</small><h4>${esc(a.title)}</h4><p>${esc(a.description)}</p></div></article>`).join("");
+/* footer */
+const C=D.creator;$("#fb1").textContent=D.className;$("#fq").textContent="“"+D.quote+"”";$("#addr").textContent=D.address;
+$("#cr").innerHTML=`<b style="color:var(--ink)">${esc(C.name)}</b><br>${esc(C.role)}<br>${C.ig?`<a href="https://instagram.com/${encodeURIComponent(C.ig.replace(/^@/,""))}" target="_blank" rel="noopener" style="color:var(--a1);font-weight:700">@${esc(C.ig.replace(/^@/,""))}</a><br>`:""}${esc(C.extra||"")}`;
+$("#fcp").textContent="© "+new Date().getFullYear()+" "+D.className+" OFFICIAL";$("#fcn").textContent=D.className;
+/* lightbox */
+const lbx=$("#lbx"),LB={items:[],i:0};
+function showLB(){const it=LB.items[LB.i];$("#li").style.opacity=0;setTimeout(()=>{$("#li").src=it.image||ph(it.caption,500);$("#li").alt=it.caption;$("#lc").textContent=it.caption;$("#lk").textContent=(LB.i+1)+" / "+LB.items.length;$("#li").style.opacity=1},120)}
+function openLB(a,i){LB.items=a;LB.i=Math.max(0,i);showLB();lbx.classList.add("o");document.body.classList.add("lock")}
+function closeLB(){lbx.classList.remove("o");if(window.__r)document.body.classList.remove("lock")}
+const stp=x=>{LB.i=(LB.i+x+LB.items.length)%LB.items.length;showLB()};
+$("#lx").onclick=closeLB;$("#lp").onclick=()=>stp(-1);$("#ln2").onclick=()=>stp(1);lbx.onclick=e=>{if(e.target===lbx)closeLB()};
+addEventListener("keydown",e=>{if(!lbx.classList.contains("o"))return;if(e.key==="Escape")closeLB();if(e.key==="ArrowLeft")stp(-1);if(e.key==="ArrowRight")stp(1)});
+let sx0=0;lbx.addEventListener("touchstart",e=>sx0=e.changedTouches[0].clientX,{passive:true});lbx.addEventListener("touchend",e=>{const d=e.changedTouches[0].clientX-sx0;if(Math.abs(d)>50)stp(d>0?-1:1)},{passive:true});
+/* mulai */
+let io,typing=false;
+function start(){io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.08,rootMargin:"0px 0px -6% 0px"});$$(".rv,.org").forEach(e=>io.observe(e));setTimeout(()=>$("#h1").classList.add("in"),120);typeLoop();const v=$("#mainBox video");if(v)v.play().catch(()=>{})}
+if(window.__r)start();else addEventListener("siteready",start,{once:true});
+function typeLoop(){if(typing)return;typing=true;const el=$("#typed");let w=0,c=0,dl=false;(function f(){const s=D.typing[w]||"";if(!dl){c++;el.textContent=s.slice(0,c);if(c>=s.length){dl=true;return setTimeout(f,1800)}}else{c--;el.textContent=s.slice(0,c);if(c<=0){dl=false;w=(w+1)%D.typing.length}}setTimeout(f,dl?24:48)})()}
+/* nav */
+const lk=$("#links"),bg=$("#burger"),lq=$("#lq"),A=$$("#links a");
+bg.onclick=()=>{const o=lk.classList.toggle("open");bg.setAttribute("aria-expanded",o);document.body.classList.toggle("lock",o)};
+A.forEach(a=>a.onclick=()=>{lk.classList.remove("open");bg.setAttribute("aria-expanded",false);document.body.classList.remove("lock")});
+function moveLq(a){if(!a||innerWidth<=1000)return;lq.style.width=a.offsetWidth+"px";lq.style.transform=`translateX(${a.offsetLeft}px)`}
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){A.forEach(a=>{const on=a.getAttribute("href")==="#"+e.target.id;a.classList.toggle("on",on);if(on)moveLq(a)})}}),{rootMargin:"-45% 0px -50% 0px"});
+["home","media","struktur","anggota","galeri","prestasi","jadwal"].forEach(i=>so.observe(document.getElementById(i)));addEventListener("resize",()=>moveLq($("#links a.on")));
+/* scroll + parallax halus (lerp, bebas getar) */
+let sy=scrollY,ty=scrollY,mx=0,my=0,tmx=0,tmy=0;const BF=$$(".bf"),reduce=matchMedia("(prefers-reduced-motion:reduce)").matches,fine=matchMedia("(pointer:fine)").matches;
+addEventListener("scroll",()=>{ty=scrollY;const h=root,m=h.scrollHeight-h.clientHeight;$("#bar").style.width=(m>0?ty/m*100:0)+"%";$("#top").classList.toggle("s",ty>700)},{passive:true});
+(function loop(){sy+=(ty-sy)*.09;mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;if(!reduce)BF.forEach(b=>{const k=+b.dataset.k;b.style.transform=`translate3d(${(mx*k).toFixed(2)}px,${(my*k-sy*k*.14).toFixed(2)}px,0)`});requestAnimationFrame(loop)})();
+$("#top").onclick=()=>scrollTo({top:0,behavior:"smooth"});
+/* kursor, ripple, tilt */
+let cx=0,cy=0,rx=0,ry=0;if(fine){root.classList.add("fine");(function l(){rx+=(cx-rx)*.18;ry+=(cy-ry)*.18;$("#ring").style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(l)})()}
+addEventListener("pointermove",e=>{cx=e.clientX;cy=e.clientY;if(fine){$("#cur").style.transform=`translate(${cx}px,${cy}px)`;$("#ring").classList.toggle("h",!!e.target.closest("a,button,.card,.sht,input"))}
+tmx=(cx/innerWidth-.5)*40;tmy=(cy/innerHeight-.5)*40;$("#nav").style.setProperty("--lx",(cx-$("#nav").getBoundingClientRect().left)+"px");
+const c=e.target.closest(".card");if(c){const r=c.getBoundingClientRect();c.style.setProperty("--px",(e.clientX-r.left)+"px");c.style.setProperty("--py",(e.clientY-r.top)+"px");if(fine&&!reduce&&c.hasAttribute("data-t")){c.style.setProperty("--ry",((e.clientX-r.left)/r.width-.5)*8+"deg");c.style.setProperty("--rx",-((e.clientY-r.top)/r.height-.5)*8+"deg")}}
+const b=e.target.closest(".btn");if(b&&fine&&!reduce){const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.3-3}px)`}},{passive:true});
+document.addEventListener("pointerout",e=>{const c=e.target.closest&&e.target.closest(".card");if(c&&!c.contains(e.relatedTarget)){c.style.setProperty("--rx","0deg");c.style.setProperty("--ry","0deg")}const b=e.target.closest&&e.target.closest(".btn");if(b&&!b.contains(e.relatedTarget))b.style.transform=""});
+addEventListener("pointerdown",e=>{if(reduce)return;const r=document.createElement("div");r.className="rip";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),700)});
+const fm=$("#fr"),stg=fm.parentElement;if(fine&&!reduce){stg.addEventListener("pointermove",e=>{const r=stg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;fm.style.transform=`rotateY(${x*16}deg) rotateX(${-y*16}deg)`});stg.addEventListener("pointerleave",()=>fm.style.transform="")}
+</script>
 </body>
 </html>
