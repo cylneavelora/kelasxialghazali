@@ -180,6 +180,8 @@ table.sch{min-width:1120px}td[colspan]{text-align:center}.brk{display:inline-blo
 .lgo{position:relative;width:74px;height:74px;border-radius:23px;display:grid;place-items:center;background:var(--b);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),0 14px 30px rgba(0,0,0,.25)}.lgo svg{width:40px;height:40px}
 .scd h3{position:relative;font-size:1.6rem}.scd p{position:relative;color:var(--mut)}.scd .go{position:relative;margin-top:auto}
 @media(max-width:1000px){.sc{grid-template-columns:1fr}.scd{min-height:0}}
+.vbox{padding:12px;border-radius:30px;max-width:980px;margin:auto}.vbox video,.vph{display:block;width:100%;aspect-ratio:16/9;border-radius:20px;object-fit:cover;background:#000}.vph{display:grid;place-items:center;background:linear-gradient(135deg,var(--a1),var(--a3));color:#fff;font:700 1rem var(--hf);text-align:center;padding:20px}
+.vcap{text-align:center;color:var(--mut);font:600 .86rem var(--bf);margin:14px 0 4px}
 </style>
 <noscript><style>#ld{display:none}.rv{opacity:1!important;transform:none!important}.ln span{transform:none}body.lock{overflow:auto}</style></noscript>
 </head>
@@ -209,6 +211,9 @@ table.sch{min-width:1120px}td[colspan]{text-align:center}.brk{display:inline-blo
 </div>
 <div class="stage rv"><div class="fr" id="fr"><div class="main" id="mainBox"></div><div class="mini m1"><img id="mi1" alt=""></div><div class="mini m2"><img id="mi2" alt=""></div><div class="chip"><b id="hn"></b><small id="hs"></small></div></div></div></div>
 <div class="mq" aria-hidden="true"><div class="mt" id="mq"></div></div></div></section>
+
+<section class="sec" id="video"><div class="wrap"><div class="sh rv"><small>Video</small><h2>Cuplikan <em>kebersamaan</em></h2><p>Ketuk video untuk memutar dengan suara.</p></div>
+<div class="card vbox rv" id="vbox"></div><p class="vcap" id="vcap"></p></div></section>
 
 <section class="sec" id="media"><div class="wrap"><div class="sh rv"><small>Media sosial</small><h2>Tiga ruang, <em>satu perjalanan</em></h2><p>Temukan kelas kami di Instagram, TikTok, dan Spotify.</p></div>
 <div class="sc" id="sc"></div></div></section>
@@ -251,12 +256,13 @@ requestAnimationFrame(tk);setTimeout(fin,7000)})();
 const DATA={className:"XI AL GHOZALI",school:"Yayasan Tarbiyatul Wathon",year:"2026 / 2027",
 quote:"Di sekolah kita belajar lebih dari pelajaran — kita belajar tentang hidup.",
 address:"Yayasan Tarbiyatul Wathon, Gresik, Jawa Timur",
-creator:{name:"Brian Offc",role:"Siswa XI AL GHOZALI",ig:"@lauampash",extra:"On Tiktok @cel_lwk"},
+creator:{name:"Brian Official",role:"Siswa XI AL GHOZALI",ig:"",extra:""},
 desc:"Bukan sekadar ruang belajar, tetapi tempat banyak cerita dimulai, persahabatan tumbuh, dan kenangan tercipta.",
-heroVideo:"",heroImage:"https://files.catbox.moe/hhkzfy.mp4",heroImage2:"https://ziperrimg2.lovable.app/f/sdjzr95k5s.jpg",heroImage3:"https://ziperrimg2.lovable.app/f/qa584ewvdk.jpg",heroNote:"Kelas kita, cerita kita",
+heroVideo:"",heroImage:"https://ziperrimg2.lovable.app/f/p6mst8trc2.jpg",heroImage2:"https://ziperrimg2.lovable.app/f/sdjzr95k5s.jpg",heroImage3:"https://ziperrimg2.lovable.app/f/qa584ewvdk.jpg",heroNote:"Kelas kita, cerita kita",
+/* video landscape: isi url video (mp4) */
+video:{url:"https://files.catbox.moe/hhkzfy.mp4",caption:"Potongan momen kebersamaan kelas XI AL GHOZALI"},
 city:"Gresik",lat:-7.16,lon:112.65,
-music:[{title:"Lady Killers II",artist:"G-Eazy",url:"https://ziperrimg2.lovable.app/f/kmqcbj3i9o.mp3",cover:"https://ziperrimg2.lovable.app/f/urcfmk5ti8.jpg"}, 
-       {title:"Tarot.",artist:"Feast.",url:"https://ziperrimg2.lovable.app/f/zm3d6i257g.mp3",cover:"https://ziperrimg2.lovable.app/f/unbaurv8do.jpg"}], 
+music:[{title:"Lady Killers II x A’int in LA",artist:"G-Eazy & Adela",url:"https://n.uguu.se/nYnFrtzOfQAQ.mp3",cover:""}],
 typing:["pov: punya web kelas buat memories","enam belas kepala, satu keluarga","tempat semua cerita kelas disimpan"],
 marquee:["Kebersamaan","Kenangan","Persahabatan","Prestasi","Tawa","Perjuangan","Keluarga","Selamanya"],
 /* Sosial media: isi url akun. */
@@ -266,7 +272,7 @@ tt:{handle:"@username",url:"",desc:"Video seru dan momen lucu kelas"},
 sp:{handle:"Playlist kelas",url:"",desc:"Lagu-lagu yang menemani kelas"}},
 leaders:{kepsek:{name:"Anna Lutfa",photo:""},wali:{name:"Muhammad Faiq Muizzudin",photo:""}},
 /* anggota: [nama, jabatan (untuk bagan struktur saja), username ig, nama di bagan]. Foto: tambah photo nanti. */
-members:[["Adhatus Salvia El Ma’ruf","Bendahara"],["Ahmad Brian Rifqi Al’fuad","Anggota","lauampash"],["Ahmad Iklyl Hibatulloh"],["Almirah Arisanti Cahyaningrum"],["Excel Putra Aninditya"],["Iyazi Laili Safitri"],["Kalisha Salsabila"],["Mohammad Nailul Rohman","Ketua Kelas","","Moh. Nailul Rohman"],["Mohammad Reza Akbar"],["Muhammad Haikal Fikry"],["Nur Sabrina Aqilah"],["Qo’imatin Ni’mah","Sekretaris"],["Saskia Erisyah Martha"],["Sultan Syarif Alim"],["Vaqihatul Khasanah"],["Wildah Izuka"]].map(([name,role,ig,org])=>({name,role:role||"Anggota",photo:"",ig:ig||"",org:org||""})),
+members:[["Adhatus Salvia El Ma’ruf","Bendahara"],["Ahmad Brian Rifqi Al’fuad","Anggota","lauampash","","https://files.catbox.moe/cq34q2.png"],["Ahmad Iklyl Hibatulloh"],["Almirah Arisanti Cahyaningrum"],["Excel Putra Aninditya"],["Iyazi Laili Safitri"],["Kalisha Salsabila"],["Mohammad Nailul Rohman","Ketua Kelas","","Moh. Nailul Rohman"],["Mohammad Reza Akbar"],["Muhammad Haikal Fikry"],["Nur Sabrina Aqilah"],["Qo’imatin Ni’mah","Sekretaris"],["Saskia Erisyah Martha"],["Sultan Syarif Alim"],["Vaqihatul Khasanah"],["Wildah Izuka"]].map(([name,role,ig,org,photo])=>({name,role:role||"Anggota",photo:photo||"",ig:ig||"",org:org||""})),
 achievements:[{icon:"🏆",year:"2026",title:"Prestasi / Kejuaraan",description:"Pernah memenangkan Lomba Menghias Taman Juara 2.",image:"https://ziperrimg2.lovable.app/f/7endi7qqmq.jpg"},{icon:"📜",year:"2026",title:"Sertifikat Penghargaan",description:"Mendapatkan sertifikat atas kemenangan Lomba Menghias Taman.",image:"https://ziperrimg2.lovable.app/f/2zfnhk95b8.jpg"},{icon:"⭐",year:"2026",title:"Pencapaian Bersama",description:"Memenangkan sejumlah lomba Semarak Agustus yang penuh tawa dan gembira bersama.",image:"https://ziperrimg2.lovable.app/f/vdkp2yddru.jpg"}],
 /* galeri potret (image = URL foto) */
 gallery:[{image:"https://ziperrimg2.lovable.app/f/5r9n6vu24c.jpg",caption:"Hari pertama bersama"},{image:"https://ziperrimg2.lovable.app/f/sdjzr95k5s.jpg",caption:"Momen kebersamaan"},{image:"https://ziperrimg2.lovable.app/f/qa584ewvdk.jpg",caption:"Cerita di sekolah"},{image:"https://ziperrimg2.lovable.app/f/7endi7qqmq.jpg",caption:"Kenangan yang berharga"},{image:"https://ziperrimg2.lovable.app/f/2zfnhk95b8.jpg",caption:"Kegiatan kelas"},{image:"https://ziperrimg2.lovable.app/f/vdkp2yddru.jpg",caption:"Tawa bersama"},{image:"https://ziperrimg2.lovable.app/f/wbvbqeujuk.jpg",caption:"Satu cerita"},{image:"https://ziperrimg2.lovable.app/f/d3qmr5n5cv.jpg",caption:"Momen sederhana"},{image:"https://ziperrimg2.lovable.app/f/28ytosprm8.jpg",caption:"Kebersamaan"},{image:"https://ziperrimg2.lovable.app/f/fvacjqsj4m.jpg",caption:"Hari yang menyenangkan"},{image:"https://ziperrimg2.lovable.app/f/87u5atvgy9.jpg",caption:"Teman seperjalanan"},{image:"https://ziperrimg2.lovable.app/f/kjhbimwq8n.jpg",caption:"Sampai jumpa di cerita lain"},{image:"https://ziperrimg2.lovable.app/f/vrianox2q9.jpg",caption:"Hari-hari seru"},{image:"https://ziperrimg2.lovable.app/f/5r9n6vu24c.jpg",caption:"Cerita kita"}],
@@ -306,6 +312,9 @@ $("#mi1").src=D.heroImage2||ph("Kenangan",400);$("#mi2").src=D.heroImage3||ph("B
 $("#mq").innerHTML=[0,1].map(()=>D.marquee.map(w=>`<span>${esc(w)}</span>`).join("")).join("");
 $$("#ld .po img").forEach((e,i)=>e.src=(D.gallery[i]&&D.gallery[i].image)||ph("Foto "+(i+1),400));
 $("#bgf").innerHTML=[["12%","6%","150px","-6deg",.6],["80%","12%","130px","7deg",.9],["3%","58%","120px","5deg",1.2],["86%","62%","160px","-5deg",.5],["46%","84%","110px","4deg",1]].map((f,i)=>`<div class="bf" data-k="${f[4]}" style="--x:${f[0]};--y:${f[1]};--w:${f[2]};--r:${f[3]};--t:${8+i}s"><i>${im(D.gallery[i]&&D.gallery[i].image,"Foto "+(i+1),500)}</i></div>`).join("");
+/* video landscape */
+$("#vbox").innerHTML=D.video.url?`<video src="${esc(D.video.url)}" muted loop playsinline controls autoplay preload="metadata"></video>`:`<div class="vph">Video belum diisi</div>`;$("#vcap").textContent=D.video.caption||"";
+const vv=$("#vbox video");if(vv)new IntersectionObserver(es=>es.forEach(e=>{e.isIntersecting?vv.play().catch(()=>{}):vv.pause()}),{threshold:.35}).observe(vv);
 /* jam, tanggal, cuaca */
 const WX={0:["☀️","Cerah"],1:["🌤️","Cerah berawan"],2:["⛅","Berawan"],3:["☁️","Mendung"],45:["🌫️","Berkabut"],48:["🌫️","Berkabut"],51:["🌦️","Gerimis"],53:["🌦️","Gerimis"],55:["🌦️","Gerimis"],61:["🌧️","Hujan ringan"],63:["🌧️","Hujan"],65:["🌧️","Hujan lebat"],80:["🌦️","Hujan lokal"],81:["🌧️","Hujan"],82:["⛈️","Hujan deras"],95:["⛈️","Badai petir"],96:["⛈️","Badai petir"],99:["⛈️","Badai petir"]};
 function tick(){const n=new Date(),h=n.getHours();$("#clock").textContent=n.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit"}).replace(/\./g,":");
